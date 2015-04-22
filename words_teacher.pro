@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        window.cpp
+        window.cpp \
+    wordwt.cpp
 
-HEADERS  += window.h
+HEADERS  += window.h \
+    wordwt.h
 
 FORMS    += window.ui
