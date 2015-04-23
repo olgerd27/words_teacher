@@ -18,11 +18,16 @@ public:
     void addTranslation(const std::string &tr);
     bool isTranslation(const std::string &tr);
 
+    inline bool isStudied() const { return m_repeatsCount >= maxRepeatsQuantity; }
+
 private:
     typedef std::vector<std::string> T_translations;
 
+    enum { maxRepeatsQuantity = 5 };
+
     std::string m_word;
     T_translations m_translations;
+    short m_repeatsCount;
 };
 
 #endif // WORDWT_H

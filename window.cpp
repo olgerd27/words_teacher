@@ -1,9 +1,13 @@
+#include <QMessageBox>
+
 #include "window.h"
 #include "ui_window.h"
+#include "word_teacher.h"
 
 Window::Window(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Window)
+    , m_teacher(new WordTeacher())
 {
     ui->setupUi(this);
 
@@ -19,6 +23,7 @@ Window::Window(QWidget *parent)
 Window::~Window()
 {
     delete ui;
+    delete m_teacher;
 }
 
 void Window::slotLoadData()
@@ -28,5 +33,5 @@ void Window::slotLoadData()
 
 void Window::slotAbout()
 {
-
+    QMessageBox::about(this, tr("About"), tr("Mykolaiv, 2015"));
 }

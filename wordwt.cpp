@@ -3,6 +3,7 @@
 
 WordWT::WordWT(const std::string &word)
     : m_word(word)
+    , m_repeatsCount(0)
 {
 }
 
@@ -13,5 +14,7 @@ void WordWT::addTranslation(const std::string &tr)
 
 bool WordWT::isTranslation(const std::string &tr)
 {
-    return std::find(m_translations.begin(), m_translations.end(), tr) != 0;
+    bool b = std::find(m_translations.begin(), m_translations.end(), tr) != m_translations.end();
+    if (b) m_repeatsCount++;
+    return b;
 }

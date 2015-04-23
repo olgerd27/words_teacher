@@ -14,9 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         window.cpp \
-    wordwt.cpp
+    wordwt.cpp \
+    word_teacher.cpp
 
 HEADERS  += window.h \
-    wordwt.h
+    wordwt.h \
+    word_teacher.h
 
 FORMS    += window.ui

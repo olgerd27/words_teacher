@@ -6,6 +6,7 @@
 namespace Ui {
 class Window;
 }
+class WordTeacher;
 
 class Window : public QWidget
 {
@@ -24,7 +25,7 @@ signals:
 
 private:
     Ui::Window *ui;
-
+    WordTeacher *m_teacher;
 };
 
 #endif // WINDOW_H
