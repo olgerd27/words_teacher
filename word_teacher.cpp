@@ -34,6 +34,7 @@ void WordTeacher::addWord(WordWT *word)
 
 WordWT * WordTeacher::getWord()
 {
+    if (m_vcblr.empty()) return 0;
     WordWT *word = 0;
     do {
         if (m_vcblr.empty()) return 0;
@@ -45,7 +46,7 @@ WordWT * WordTeacher::getWord()
 bool WordTeacher::wordIsStudied(WordWT *word)
 {
     bool b = word->repeatsCount() >= maxRepeatsQuantity;
-//    if (b) std::cout << word->word(WordWT::getw_without_repeat) << " was studied" << std::endl;
+//    if (b) qDebug() << word->word(WordWT::getw_without_repeat).c_str() << " was studied";
     if (b) m_vcblr.erase( std::find(m_vcblr.begin(), m_vcblr.end(), word) ); // erase studied word from vocabulary
     return b;
 }

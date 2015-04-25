@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include <iostream>
+//#include <iostream>
 #include <QDebug>
 
 /*
@@ -19,17 +19,17 @@ public:
 
     WordWT(const std::string &word);
 
-    inline void setWord(const std::string &word) { m_word = word; }
+    void setWord(const std::string &word);
     std::string word(WordWT::getWordMode mode = WordWT::getw_with_repeat);
 
     void addTranslation(const std::string &tr);
 //    std::string nextTranslation() const;
     bool isTranslation(const std::string &tr);
 
-    inline int repeatsCount() const { return m_checksCount; }
+    int repeatsCount() const;
 
-    friend QDebug & operator<<(QDebug &qdbg, WordWT &w);
-    friend std::ostream & operator<<(std::ostream &os, WordWT &w);
+    friend QDebug operator<<(QDebug qdbg, WordWT &w);
+//    friend std::ostream & operator<<(std::ostream &os, WordWT &w);
 
 private:
     typedef std::vector<std::string> T_translations;
