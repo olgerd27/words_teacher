@@ -13,8 +13,15 @@ public:
     explicit WordTeacher(QObject *parent = 0);
     ~WordTeacher();
 
+    void addWord(WordWT *word);
+    WordWT * getWord();
+
 private:
+    bool wordIsStudied(WordWT *word);
+
     typedef std::vector<WordWT*> T_vocabulary;
+
+    enum { maxRepeatsQuantity = 3 };
 
     T_vocabulary m_vcblr;
 };

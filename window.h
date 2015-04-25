@@ -22,8 +22,11 @@ private slots:
 
 signals:
     void sigFileIsLoaded(bool);
+    void sigDisplayWord(QString);
 
 private:
+    void askNextWord();
+
     Ui::Window *ui;
     WordTeacher *m_teacher;
 };

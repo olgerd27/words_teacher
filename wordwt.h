@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
+#include <QDebug>
 
 /*
  * Word with translations
@@ -10,24 +12,31 @@
 class WordWT
 {
 public:
+    enum getWordMode {
+        getw_with_repeat,   /* word getting with increment repeating */
+        getw_without_repeat /* word getting without increment repeating */
+    };
+
     WordWT(const std::string &word);
 
     inline void setWord(const std::string &word) { m_word = word; }
-    inline std::string word() const { return m_word; }
+    std::string word(WordWT::getWordMode mode = WordWT::getw_with_repeat);
 
     void addTranslation(const std::string &tr);
+//    std::string nextTranslation() const;
     bool isTranslation(const std::string &tr);
 
-    inline bool isStudied() const { return m_repeatsCount >= maxRepeatsQuantity; }
+    inline int repeatsCount() const { return m_checksCount; }
+
+    friend QDebug & operator<<(QDebug &qdbg, WordWT &w);
+    friend std::ostream & operator<<(std::ostream &os, WordWT &w);
 
 private:
     typedef std::vector<std::string> T_translations;
 
-    enum { maxRepeatsQuantity = 5 };
-
     std::string m_word;
     T_translations m_translations;
-    short m_repeatsCount;
+    int m_checksCount;
 };
 
 #endif // WORDWT_H
