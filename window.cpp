@@ -23,6 +23,8 @@ Window::Window(QWidget *parent)
     connect(ui->m_pbLoad, SIGNAL(clicked()), this, SLOT(slotLoadData()));
     connect(this, SIGNAL(sigFileIsLoaded(bool)), ui->m_gbExamination, SLOT(setEnabled(bool)));
     connect(this, SIGNAL(sigFileIsLoaded(bool)), ui->m_gbResults, SLOT(setEnabled(bool)));
+    connect(this, SIGNAL(sigFileIsLoaded(bool)), m_teacher, SLOT(slotAllWordsGetted(bool)));
+    connect(this, SIGNAL(sigFileIsLoaded(bool)), m_resCtrl, SLOT(slotUpdateResults()));
 
     /* Examination */
     connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_lWordForTranslation, SLOT(setText(QString)));
@@ -30,7 +32,11 @@ Window::Window(QWidget *parent)
     connect(ui->m_pbDontKnow, SIGNAL(clicked()), this, SLOT(slotDontKnowWord()));
 
     /* Results */
-    connect(this, SIGNAL(sigWordChecked(bool)), m_resCtrl, SLOT(slotUpdateResults(bool)));
+    connect(m_teacher, SIGNAL(sigGettedWordsQuantity(int)), m_resCtrl, SLOT(slotSetWordsQuantity(int)));
+
+    connect(this, SIGNAL(sigWordChecked(bool)), m_resCtrl, SLOT(slotCalcResults(bool)));
+    connect(this, SIGNAL(sigWordChecked(bool)), m_resCtrl, SLOT(slotUpdateResults()));
+
     connect(m_resCtrl, SIGNAL(sigUpdateWordsRemain(int)), ui->m_lRemainingW_data, SLOT(setNum(int)));
     connect(m_resCtrl, SIGNAL(sigUpdateWordsTransl(int)), ui->m_lTranslatedW_data, SLOT(setNum(int)));
     connect(m_resCtrl, SIGNAL(sigUpdateMark(int)), ui->m_lmark_data, SLOT(setNum(int)));
@@ -74,7 +80,6 @@ void Window::slotLoadData()
 //    }
 
     emit sigFileIsLoaded(true);
-    emit sigWordsAreGetting( m_teacher->wordsQuantity() );
     askNextWord();
 }
 

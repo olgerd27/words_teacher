@@ -68,7 +68,8 @@ void WordTeacher::repeatVocabulary()
     m_vcblr_copy.clear();
 }
 
-int WordTeacher::wordsQuantity() const
+void WordTeacher::slotAllWordsGetted(bool b)
 {
-    return m_vcblr.size();
+    if (b) emit sigGettedWordsQuantity( m_vcblr.size() * maxRepeatsQuantity );
 }
+

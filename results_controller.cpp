@@ -24,7 +24,7 @@ void ResultsController::slotSetWordsQuantity(int quantity)
     m_currConcl = conc_NONE;
 }
 
-void ResultsController::slotUpdateResults(bool rightAnswer)
+void ResultsController::slotCalcResults(bool rightAnswer)
 {
     // calculate results
     --m_wordsRemaining;
@@ -32,7 +32,10 @@ void ResultsController::slotUpdateResults(bool rightAnswer)
     if (rightAnswer) ++m_wordsTranslated;
     m_mark = m_wordsTranslated * 1. / m_wordsTeached * 100;
     defineConclusion();
+}
 
+void ResultsController::slotUpdateResults()
+{
     // send to visualization
     emit sigUpdateWordsRemain( m_wordsRemaining );
     emit sigUpdateWordsTransl( m_wordsTranslated );

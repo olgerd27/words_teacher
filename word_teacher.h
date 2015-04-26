@@ -18,7 +18,11 @@ public:
     bool isTranslation(const WordWT *word, const std::string &translation) const;
     void repeatVocabulary();
 
-    int wordsQuantity() const;
+signals:
+    int sigGettedWordsQuantity(int);
+
+public slots:
+    void slotAllWordsGetted(bool);
 
 private:
     bool wordIsStudied(WordWT *word);

@@ -17,7 +17,8 @@ signals:
 
 public slots:
     void slotSetWordsQuantity(int);
-    void slotUpdateResults(bool);
+    void slotCalcResults(bool);
+    void slotUpdateResults();
     void slotFlush();
 
 private:
