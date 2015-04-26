@@ -7,6 +7,7 @@ namespace Ui {
 class Window;
 }
 class WordTeacher;
+class WordWT;
 
 class Window : public QWidget
 {
@@ -29,6 +30,7 @@ private:
 
     Ui::Window *ui;
     WordTeacher *m_teacher;
+    WordWT *m_currentWord;
 };
 
 #endif // WINDOW_H

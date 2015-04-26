@@ -14,7 +14,7 @@ void WordWT::setWord(const std::string &word)
 
 std::string WordWT::word(WordWT::getWordMode mode)
 {
-    if (mode == getw_with_repeat) ++m_checksCount;
+    if (mode == GetWithRepeat) ++m_checksCount;
     return m_word;
 }
 
@@ -43,6 +43,11 @@ bool WordWT::isTranslation(const std::string &tr)
 int WordWT::repeatsCount() const
 {
     return m_checksCount;
+}
+
+void WordWT::flush()
+{
+    m_checksCount = 0;
 }
 
 QDebug operator<<(QDebug qdbg, WordWT &w)

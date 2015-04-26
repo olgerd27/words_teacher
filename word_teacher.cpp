@@ -34,7 +34,6 @@ void WordTeacher::addWord(WordWT *word)
 
 WordWT * WordTeacher::getWord()
 {
-    if (m_vcblr.empty()) return 0;
     WordWT *word = 0;
     do {
         if (m_vcblr.empty()) return 0;
@@ -46,7 +45,21 @@ WordWT * WordTeacher::getWord()
 bool WordTeacher::wordIsStudied(WordWT *word)
 {
     bool b = word->repeatsCount() >= maxRepeatsQuantity;
-//    if (b) qDebug() << word->word(WordWT::getw_without_repeat).c_str() << " was studied";
-    if (b) m_vcblr.erase( std::find(m_vcblr.begin(), m_vcblr.end(), word) ); // erase studied word from vocabulary
+//    if (b) qDebug() << word->word(WordWT::GetWithoutRepeat).c_str() << " was studied";
+    if (b) {
+        m_vcblr_copy.push_back(word);
+        m_vcblr.erase( std::find(m_vcblr.begin(), m_vcblr.end(), word) ); // erase studied word from vocabulary
+    }
     return b;
+}
+
+void flushWord(WordWT *w) { w->flush(); }
+
+void WordTeacher::repeatVocabulary()
+{
+    /* Restart studying the words of current vocabulary */
+    m_vcblr.assign(m_vcblr_copy.begin(), m_vcblr_copy.end());
+    std::for_each(m_vcblr.begin(), m_vcblr.end(), flushWord);
+    m_vcblr_copy.clear();
+    qDebug() << "SIZEs, m_vcblr = " << m_vcblr.size() << ", m_vcblr_copy = " << m_vcblr_copy.size();
 }

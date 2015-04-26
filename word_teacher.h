@@ -15,6 +15,7 @@ public:
 
     void addWord(WordWT *word);
     WordWT * getWord();
+    void repeatVocabulary();
 
 private:
     bool wordIsStudied(WordWT *word);
@@ -24,6 +25,7 @@ private:
     enum { maxRepeatsQuantity = 3 };
 
     T_vocabulary m_vcblr;
+    T_vocabulary m_vcblr_copy;
 };
 
 #endif // WORD_TEACHER_H

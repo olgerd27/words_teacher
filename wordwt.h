@@ -13,20 +13,21 @@ class WordWT
 {
 public:
     enum getWordMode {
-        getw_with_repeat,   /* word getting with increment repeating */
-        getw_without_repeat /* word getting without increment repeating */
+        GetWithRepeat,   /* word getting with increment repeating */
+        GetWithoutRepeat /* word getting without increment repeating */
     };
 
     WordWT(const std::string &word);
 
     void setWord(const std::string &word);
-    std::string word(WordWT::getWordMode mode = WordWT::getw_with_repeat);
+    std::string word(WordWT::getWordMode mode = WordWT::GetWithRepeat);
 
     void addTranslation(const std::string &tr);
 //    std::string nextTranslation() const;
     bool isTranslation(const std::string &tr);
 
     int repeatsCount() const;
+    void flush();
 
     friend QDebug operator<<(QDebug qdbg, WordWT &w);
 //    friend std::ostream & operator<<(std::ostream &os, WordWT &w);
