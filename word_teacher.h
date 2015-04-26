@@ -15,7 +15,10 @@ public:
 
     void addWord(WordWT *word);
     WordWT * getWord();
+    bool isTranslation(const WordWT *word, const std::string &translation) const;
     void repeatVocabulary();
+
+    int wordsQuantity() const;
 
 private:
     bool wordIsStudied(WordWT *word);

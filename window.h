@@ -8,7 +8,15 @@ class Window;
 }
 class WordTeacher;
 class WordWT;
+class ResultsController;
 
+/*
+ * TODO: there are need to implement the Settings widget, that calls by clicking to the Settings push button.
+ * Settings widget can to have:
+ * - repeate word quantity;
+ * - symbol separated word and translation words;
+ * - symbol separated translation words.
+ */
 class Window : public QWidget
 {
     Q_OBJECT
@@ -19,11 +27,15 @@ public:
 
 private slots:
     void slotLoadData();
+    void slotApplyWord();
+    void slotDontKnowWord();
     void slotAbout();
 
 signals:
     void sigFileIsLoaded(bool);
-    void sigDisplayWord(QString);
+    void sigWordsAreGetting(int);
+    void sigNeedDisplayWord(QString);
+    void sigWordChecked(bool);
 
 private:
     void askNextWord();
@@ -31,6 +43,7 @@ private:
     Ui::Window *ui;
     WordTeacher *m_teacher;
     WordWT *m_currentWord;
+    ResultsController *m_resCtrl;
 };
 
 #endif // WINDOW_H

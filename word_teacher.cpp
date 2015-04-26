@@ -53,6 +53,11 @@ bool WordTeacher::wordIsStudied(WordWT *word)
     return b;
 }
 
+bool WordTeacher::isTranslation(const WordWT *word, const std::string &translation) const
+{
+    return word->findTranslation(translation);
+}
+
 void flushWord(WordWT *w) { w->flush(); }
 
 void WordTeacher::repeatVocabulary()
@@ -61,5 +66,9 @@ void WordTeacher::repeatVocabulary()
     m_vcblr.assign(m_vcblr_copy.begin(), m_vcblr_copy.end());
     std::for_each(m_vcblr.begin(), m_vcblr.end(), flushWord);
     m_vcblr_copy.clear();
-    qDebug() << "SIZEs, m_vcblr = " << m_vcblr.size() << ", m_vcblr_copy = " << m_vcblr_copy.size();
+}
+
+int WordTeacher::wordsQuantity() const
+{
+    return m_vcblr.size();
 }

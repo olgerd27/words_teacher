@@ -35,7 +35,7 @@ void WordWT::addTranslation(const std::string &tr)
 //    return res;
 //}
 
-bool WordWT::isTranslation(const std::string &tr)
+bool WordWT::findTranslation(const std::string &tr) const
 {
     return std::find(m_translations.begin(), m_translations.end(), tr) != m_translations.end();
 }
@@ -56,9 +56,3 @@ QDebug operator<<(QDebug qdbg, WordWT &w)
         qdbg << w.word().c_str() << ":" << (*it).c_str();
     return qdbg;
 }
-
-//std::ostream & operator<<(std::ostream &os, WordWT &w)
-//{
-//    os << w.word() << ":" << *(w.m_translations.begin()) << " (" << w.repeatsCount() << ")" << std::endl;
-//    return os;
-//}

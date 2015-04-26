@@ -240,7 +240,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
-           <widget class="QLabel" name="m_lAllW_title">
+           <widget class="QLabel" name="m_lRemainingW_title">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -248,7 +248,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>All words quantity</string>
+             <string>Words remaining</string>
             </property>
            </widget>
           </item>
@@ -323,7 +323,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLabel" name="m_lAllW_data">
+           <widget class="QLabel" name="m_lRemainingW_data">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -385,12 +385,12 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Translated words quantity</string>
+             <string>Translated words</string>
             </property>
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QLabel" name="m_lYourMark_data">
+           <widget class="QLabel" name="m_lmark_data">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -435,7 +435,7 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="m_lYourMark_title">
+           <widget class="QLabel" name="m_lmark_title">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>

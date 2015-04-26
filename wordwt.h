@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string>
-//#include <iostream>
 #include <QDebug>
 
 /*
@@ -24,13 +23,12 @@ public:
 
     void addTranslation(const std::string &tr);
 //    std::string nextTranslation() const;
-    bool isTranslation(const std::string &tr);
+    bool findTranslation(const std::string &tr) const;
 
     int repeatsCount() const;
     void flush();
 
     friend QDebug operator<<(QDebug qdbg, WordWT &w);
-//    friend std::ostream & operator<<(std::ostream &os, WordWT &w);
 
 private:
     typedef std::vector<std::string> T_translations;
