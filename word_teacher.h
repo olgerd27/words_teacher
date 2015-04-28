@@ -19,10 +19,10 @@ public:
     void repeatVocabulary();
 
 signals:
-    int sigGettedWordsQuantity(int);
+    int sigWordsQnttyDefined(int);
 
 public slots:
-    void slotAllWordsGetted(bool);
+    void slotDefineWordsQntty();
 
 private:
     bool wordIsStudied(WordWT *word);

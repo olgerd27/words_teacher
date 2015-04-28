@@ -33,9 +33,11 @@ private slots:
 
 signals:
     void sigFileIsLoaded(bool);
-    void sigWordsAreGetting(int);
     void sigNeedDisplayWord(QString);
     void sigWordChecked(bool);
+    void sigWordDontChecked();
+    void sigStartExamination();
+    void sigEndExamination(bool);
 
 private:
     void askNextWord();
@@ -44,6 +46,7 @@ private:
     WordTeacher *m_teacher;
     WordWT *m_currentWord;
     ResultsController *m_resCtrl;
+    bool m_examIsFinished;
 };
 
 #endif // WINDOW_H

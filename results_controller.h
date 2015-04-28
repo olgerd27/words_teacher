@@ -14,6 +14,7 @@ signals:
     void sigUpdateWordsTransl(int);
     void sigUpdateMark(int);
     void sigUpdateConclusion(QString);
+    void sigResultsUpdated();
 
 public slots:
     void slotSetWordsQuantity(int);
@@ -29,6 +30,7 @@ private:
         conc_Bad,
         conc_VeryBad,
         conc_Stupid,
+        conc_VeryStupid,
         conc_NONE,
         conc_SIZE
     };

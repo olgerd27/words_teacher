@@ -16,6 +16,7 @@ Window::Window(QWidget *parent)
     , m_teacher(new WordTeacher())
     , m_currentWord(0)
     , m_resCtrl(new ResultsController())
+    , m_examIsFinished(false)
 {
     ui->setupUi(this);
 
@@ -23,16 +24,18 @@ Window::Window(QWidget *parent)
     connect(ui->m_pbLoad, SIGNAL(clicked()), this, SLOT(slotLoadData()));
     connect(this, SIGNAL(sigFileIsLoaded(bool)), ui->m_gbExamination, SLOT(setEnabled(bool)));
     connect(this, SIGNAL(sigFileIsLoaded(bool)), ui->m_gbResults, SLOT(setEnabled(bool)));
-    connect(this, SIGNAL(sigFileIsLoaded(bool)), m_teacher, SLOT(slotAllWordsGetted(bool)));
-    connect(this, SIGNAL(sigFileIsLoaded(bool)), m_resCtrl, SLOT(slotUpdateResults()));
+    connect(this, SIGNAL(sigStartExamination()), m_teacher, SLOT(slotDefineWordsQntty()));
+    connect(this, SIGNAL(sigStartExamination()), m_resCtrl, SLOT(slotUpdateResults()));
 
     /* Examination */
     connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_lWordForTranslation, SLOT(setText(QString)));
     connect(ui->m_pbApply, SIGNAL(clicked()), this, SLOT(slotApplyWord()));
     connect(ui->m_pbDontKnow, SIGNAL(clicked()), this, SLOT(slotDontKnowWord()));
+    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_pbApply, SLOT(setDisabled(bool)));
+    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_pbDontKnow, SLOT(slotSwitchText(bool)));
 
     /* Results */
-    connect(m_teacher, SIGNAL(sigGettedWordsQuantity(int)), m_resCtrl, SLOT(slotSetWordsQuantity(int)));
+    connect(m_teacher, SIGNAL(sigWordsQnttyDefined(int)), m_resCtrl, SLOT(slotSetWordsQuantity(int)));
 
     connect(this, SIGNAL(sigWordChecked(bool)), m_resCtrl, SLOT(slotCalcResults(bool)));
     connect(this, SIGNAL(sigWordChecked(bool)), m_resCtrl, SLOT(slotUpdateResults()));
@@ -41,6 +44,7 @@ Window::Window(QWidget *parent)
     connect(m_resCtrl, SIGNAL(sigUpdateWordsTransl(int)), ui->m_lTranslatedW_data, SLOT(setNum(int)));
     connect(m_resCtrl, SIGNAL(sigUpdateMark(int)), ui->m_lmark_data, SLOT(setNum(int)));
     connect(m_resCtrl, SIGNAL(sigUpdateConclusion(QString)), ui->m_lConclusion, SLOT(setText(QString)));
+    connect(m_resCtrl, SIGNAL(sigResultsUpdated()), ui->m_leTranslation, SLOT(clear()));
 
     /* Others */
     connect(ui->m_pbAbout, SIGNAL(clicked()), this, SLOT(slotAbout()));
@@ -59,7 +63,7 @@ void Window::slotLoadData()
 {
     WordWT *word = 0;
 
-    word = new WordWT("aaa");
+    word = new WordWT("I was kind of hoping");
     word->addTranslation("AAA");
     m_teacher->addWord(word);
 
@@ -80,6 +84,7 @@ void Window::slotLoadData()
 //    }
 
     emit sigFileIsLoaded(true);
+    emit sigStartExamination();
     askNextWord();
 }
 
@@ -92,7 +97,7 @@ void Window::slotApplyWord()
 
 void Window::slotDontKnowWord()
 {
-    emit sigWordChecked(false);
+    if (!m_examIsFinished) emit sigWordChecked(false);
     askNextWord();
 }
 
@@ -105,14 +110,21 @@ void Window::askNextWord()
 {
     m_currentWord = m_teacher->getWord();
     if (!m_currentWord) {
+        emit sigEndExamination(true);
         QMessageBox::StandardButton btn = QMessageBox::information(this, tr("All words was studied"),
             tr("There was the last word. Do you want to start examination again?"),
             QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
         if (btn & QMessageBox::Yes) {
             m_teacher->repeatVocabulary();
+            emit sigEndExamination(false);
+            emit sigStartExamination();
+            m_examIsFinished = false;
             m_currentWord = m_teacher->getWord();
         }
-        return;
+        if (btn & QMessageBox::No) {
+            m_examIsFinished = true;
+            return;
+        }
     }
     emit sigNeedDisplayWord( m_currentWord->word(WordWT::GetWithRepeat).c_str() );
 }

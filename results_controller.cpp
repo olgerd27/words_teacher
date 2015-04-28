@@ -1,3 +1,4 @@
+#include <QDebug>
 #include "results_controller.h"
 
 ResultsController::ResultsController(QObject *parent)
@@ -13,7 +14,8 @@ ResultsController::ResultsController(QObject *parent)
     m_conclusionsMess[conc_NotBad] = "Not Bad";
     m_conclusionsMess[conc_Bad] = "Bad";
     m_conclusionsMess[conc_VeryBad] = "Very Bad";
-    m_conclusionsMess[conc_Stupid] = "You're stupid!";
+    m_conclusionsMess[conc_Stupid] = "You're Stupid";
+    m_conclusionsMess[conc_VeryStupid] = "You're very Stupid!";
     m_conclusionsMess[conc_NONE] = "";
 }
 
@@ -41,6 +43,7 @@ void ResultsController::slotUpdateResults()
     emit sigUpdateWordsTransl( m_wordsTranslated );
     emit sigUpdateMark( m_mark );
     emit sigUpdateConclusion( m_conclusionsMess[m_currConcl] );
+    emit sigResultsUpdated();
 }
 
 void ResultsController::slotFlush()
@@ -57,10 +60,12 @@ void ResultsController::defineConclusion()
         m_currConcl = conc_Good;
     else if (m_mark >= 65)
         m_currConcl = conc_NotBad;
-    else if (m_mark >= 40)
+    else if (m_mark >= 50)
         m_currConcl = conc_Bad;
-    else if (m_mark >= 25)
+    else if (m_mark >= 35)
         m_currConcl = conc_VeryBad;
-    else if (m_mark >= 5)
+    else if (m_mark >= 20)
         m_currConcl = conc_Stupid;
+    else if (m_mark < 20)
+        m_currConcl = conc_VeryStupid;
 }

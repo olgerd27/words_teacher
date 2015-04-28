@@ -21,6 +21,7 @@ SOURCES += main.cpp\
 HEADERS  += window.h \
     wordwt.h \
     word_teacher.h \
-    results_controller.h
+    results_controller.h \
+    pb_dontknow_next.h
 
 FORMS    += window.ui
