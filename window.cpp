@@ -30,12 +30,12 @@ Window::Window(QWidget *parent)
     /* Examination */
     connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_lWordForTranslation, SLOT(setText(QString)));
     connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_leTranslation, SLOT(setFocus()));
+    connect(ui->m_leTranslation, SIGNAL(returnPressed()), this, SLOT(slotApplyWord()));
     connect(ui->m_pbApply, SIGNAL(clicked()), this, SLOT(slotApplyWord()));
     connect(ui->m_pbDontKnow, SIGNAL(clicked()), this, SLOT(slotDontKnowWord()));
     connect(this, SIGNAL(sigEndExamination(bool)), ui->m_pbApply, SLOT(setDisabled(bool)));
     connect(this, SIGNAL(sigEndExamination(bool)), ui->m_pbDontKnow, SLOT(slotShowMaybeRestart(bool)));
     connect(this, SIGNAL(sigEndExamination(bool)), ui->m_lWordForTranslation, SLOT(clear()));
-    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_lAccuracyTranslation, SLOT(clear()));
 
     /* Results */
     connect(m_teacher, SIGNAL(sigWordsQnttyDefined(int)), m_resCtrl, SLOT(slotSetWordsQuantity(int)));
@@ -68,15 +68,15 @@ void Window::slotLoadData()
     WordWT *word = 0;
 
     word = new WordWT("I was kind of hoping");
-    word->addTranslation("A");
+    word->addTranslation("a");
     m_teacher->addWord(word);
 
-    word = new WordWT("bbb");
-    word->addTranslation("B");
+    word = new WordWT("B");
+    word->addTranslation("b");
     m_teacher->addWord(word);
 
-    word = new WordWT("ccc");
-    word->addTranslation("C");
+    word = new WordWT("C");
+    word->addTranslation("c");
     m_teacher->addWord(word);
 
 //    word = new WordWT("ddd");
@@ -107,7 +107,11 @@ void Window::slotDontKnowWord()
 
 void Window::slotAbout()
 {
-    QMessageBox::about(this, tr("About"), tr("Mykolaiv, 2015"));
+
+    QString text = QString("The <b>") + windowTitle() + "</b> application.<br>"
+                "The app helps to study any language words and its translations.<br><br>"
+                "(C) M.O.I., Mykolaiv, Ukraine - 2015.";
+    QMessageBox::about(this, tr("About"), tr(text.toUtf8()));
 }
 
 void Window::askNextWord()
