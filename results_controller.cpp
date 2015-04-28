@@ -9,13 +9,14 @@ ResultsController::ResultsController(QObject *parent)
     , m_mark(0)
     , m_currConcl(conc_NONE)
 {
-    m_conclusionsMess[conc_Excellent] = "Excellent!";
-    m_conclusionsMess[conc_Good] = "Good";
-    m_conclusionsMess[conc_NotBad] = "Not Bad";
-    m_conclusionsMess[conc_Bad] = "Bad";
-    m_conclusionsMess[conc_VeryBad] = "Very Bad";
-    m_conclusionsMess[conc_Stupid] = "You're Stupid";
-    m_conclusionsMess[conc_VeryStupid] = "You're very Stupid!";
+    m_conclusionsMess[conc_Excellent] = tr("Excellent!");
+    m_conclusionsMess[conc_VeryGood] = tr("Very Good");
+    m_conclusionsMess[conc_Good] = tr("Good");
+    m_conclusionsMess[conc_Normal] = tr("Normal");
+    m_conclusionsMess[conc_Bad] = tr("Bad");
+    m_conclusionsMess[conc_VeryBad] = tr("Very Bad");
+    m_conclusionsMess[conc_Stupid] = tr("You're Stupid");
+    m_conclusionsMess[conc_VeryStupid] = tr("Baby, you're really Stupid!");
     m_conclusionsMess[conc_NONE] = "";
 }
 
@@ -54,18 +55,12 @@ void ResultsController::slotFlush()
 
 void ResultsController::defineConclusion()
 {
-    if (m_mark >= 95)
-        m_currConcl = conc_Excellent;
-    else if (m_mark >= 80)
-        m_currConcl = conc_Good;
-    else if (m_mark >= 65)
-        m_currConcl = conc_NotBad;
-    else if (m_mark >= 50)
-        m_currConcl = conc_Bad;
-    else if (m_mark >= 35)
-        m_currConcl = conc_VeryBad;
-    else if (m_mark >= 20)
-        m_currConcl = conc_Stupid;
-    else if (m_mark < 20)
-        m_currConcl = conc_VeryStupid;
+    if      (m_mark == 100) m_currConcl = conc_Excellent;
+    else if (m_mark >= 90)  m_currConcl = conc_VeryGood;
+    else if (m_mark >= 75)  m_currConcl = conc_Good;
+    else if (m_mark >= 60)  m_currConcl = conc_Normal;
+    else if (m_mark >= 45)  m_currConcl = conc_Bad;
+    else if (m_mark >= 30)  m_currConcl = conc_VeryBad;
+    else if (m_mark >= 10)  m_currConcl = conc_Stupid;
+    else if (m_mark < 10)   m_currConcl = conc_VeryStupid;
 }

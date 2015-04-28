@@ -158,18 +158,30 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="m_lSuccesfulTranslate">
+       <widget class="Lbl_AccuracyTranslation" name="m_lAccuracyTranslation">
         <property name="minimumSize">
          <size>
           <width>200</width>
           <height>0</height>
          </size>
         </property>
+        <property name="font">
+         <font>
+          <family>DejaVu Serif</family>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <italic>false</italic>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="text">
          <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -546,7 +558,12 @@
   <customwidget>
    <class>PB_Dontknow_Next</class>
    <extends>QPushButton</extends>
-   <header>pb_dontknow_next.h</header>
+   <header>reimplemented_widgets.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Lbl_AccuracyTranslation</class>
+   <extends>QLabel</extends>
+   <header>reimplemented_widgets.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

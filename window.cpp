@@ -29,16 +29,20 @@ Window::Window(QWidget *parent)
 
     /* Examination */
     connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_lWordForTranslation, SLOT(setText(QString)));
+    connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_leTranslation, SLOT(setFocus()));
     connect(ui->m_pbApply, SIGNAL(clicked()), this, SLOT(slotApplyWord()));
     connect(ui->m_pbDontKnow, SIGNAL(clicked()), this, SLOT(slotDontKnowWord()));
     connect(this, SIGNAL(sigEndExamination(bool)), ui->m_pbApply, SLOT(setDisabled(bool)));
-    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_pbDontKnow, SLOT(slotSwitchText(bool)));
+    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_pbDontKnow, SLOT(slotShowMaybeRestart(bool)));
+    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_lWordForTranslation, SLOT(clear()));
+    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_lAccuracyTranslation, SLOT(clear()));
 
     /* Results */
     connect(m_teacher, SIGNAL(sigWordsQnttyDefined(int)), m_resCtrl, SLOT(slotSetWordsQuantity(int)));
 
     connect(this, SIGNAL(sigWordChecked(bool)), m_resCtrl, SLOT(slotCalcResults(bool)));
     connect(this, SIGNAL(sigWordChecked(bool)), m_resCtrl, SLOT(slotUpdateResults()));
+    connect(this, SIGNAL(sigWordChecked(bool)), ui->m_lAccuracyTranslation, SLOT(slotShowRight(bool)));
 
     connect(m_resCtrl, SIGNAL(sigUpdateWordsRemain(int)), ui->m_lRemainingW_data, SLOT(setNum(int)));
     connect(m_resCtrl, SIGNAL(sigUpdateWordsTransl(int)), ui->m_lTranslatedW_data, SLOT(setNum(int)));
@@ -64,15 +68,15 @@ void Window::slotLoadData()
     WordWT *word = 0;
 
     word = new WordWT("I was kind of hoping");
-    word->addTranslation("AAA");
+    word->addTranslation("A");
     m_teacher->addWord(word);
 
     word = new WordWT("bbb");
-    word->addTranslation("BBB");
+    word->addTranslation("B");
     m_teacher->addWord(word);
 
     word = new WordWT("ccc");
-    word->addTranslation("CCC");
+    word->addTranslation("C");
     m_teacher->addWord(word);
 
 //    word = new WordWT("ddd");

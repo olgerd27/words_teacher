@@ -25,8 +25,9 @@ public slots:
 private:
     enum conclusions {
         conc_Excellent,
+        conc_VeryGood,
         conc_Good,
-        conc_NotBad,
+        conc_Normal,
         conc_Bad,
         conc_VeryBad,
         conc_Stupid,
@@ -42,7 +43,7 @@ private:
     int m_wordsTranslated;
     int m_mark;
     conclusions m_currConcl;
-    const char *m_conclusionsMess[conc_SIZE];
+    QString m_conclusionsMess[conc_SIZE];
 };
 
 #endif // RESULTS_CONTROLLER_H

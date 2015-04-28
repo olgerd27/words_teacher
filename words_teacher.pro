@@ -22,6 +22,6 @@ HEADERS  += window.h \
     wordwt.h \
     word_teacher.h \
     results_controller.h \
-    pb_dontknow_next.h
+    reimplemented_widgets.h
 
 FORMS    += window.ui
