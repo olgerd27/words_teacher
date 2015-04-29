@@ -1,11 +1,14 @@
+#include <QFileDialog>
 #include <QMessageBox>
 #include <QDebug>
+#include  <stdexcept>
 
 #include "window.h"
 #include "ui_window.h"
 #include "word_teacher.h"
 #include "results_controller.h"
 #include "wordwt.h"
+#include "words_reader.h"
 
 /*
  * Window
@@ -22,6 +25,7 @@ Window::Window(QWidget *parent)
 
     /* Load data */
     connect(ui->m_pbLoad, SIGNAL(clicked()), this, SLOT(slotLoadData()));
+    connect(this, SIGNAL(sigFileNameIsSpecified(QString)), ui->m_leFileName, SLOT(setText(QString)));
     connect(this, SIGNAL(sigFileIsLoaded(bool)), ui->m_gbExamination, SLOT(setEnabled(bool)));
     connect(this, SIGNAL(sigFileIsLoaded(bool)), ui->m_gbResults, SLOT(setEnabled(bool)));
     connect(this, SIGNAL(sigStartExamination()), m_teacher, SLOT(slotDefineWordsQntty()));
@@ -65,6 +69,39 @@ Window::~Window()
 
 void Window::slotLoadData()
 {
+    try {
+//        addTestWords();
+        if (!loadWords()) return;
+    }
+    catch (std::exception &ex) {
+        QMessageBox::critical(this, tr("Error load words"), ex.what());
+        return;
+    }
+    catch (...) {
+        QMessageBox::critical(this, tr("Unknow error"), tr("Undefined error occured"));
+        return;
+    }
+
+    emit sigFileIsLoaded(true);
+    emit sigStartExamination();
+    askNextWord();
+}
+
+bool Window::loadWords()
+{
+    QString filename = QFileDialog::getOpenFileName(this, tr("Load words from a file"), "", tr("Words (*.txt *.trsl)"));
+    if (filename.isEmpty()) return false;
+    emit sigFileNameIsSpecified(filename);
+
+    WordsReader reader(filename, '-', ',');
+    WordWT *word = 0;
+    while (word = reader.getWord())
+        m_teacher->addWord(word);
+    return true;
+}
+
+void Window::addTestWords()
+{
     WordWT *word = 0;
 
     word = new WordWT("I was kind of hoping");
@@ -86,10 +123,6 @@ void Window::slotLoadData()
 //    while (word = m_teacher->getWord()) {
 //        qDebug() << *word;
 //    }
-
-    emit sigFileIsLoaded(true);
-    emit sigStartExamination();
-    askNextWord();
 }
 
 void Window::slotApplyWord()

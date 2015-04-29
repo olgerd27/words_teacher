@@ -29,7 +29,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Window</string>
+   <string>Words Teacher</string>
   </property>
   <property name="locale">
    <locale language="Russian" country="Ukraine"/>
@@ -51,6 +51,14 @@
          <width>350</width>
          <height>0</height>
         </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Courier New</family>
+        </font>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

@@ -32,6 +32,7 @@ private slots:
     void slotAbout();
 
 signals:
+    void sigFileNameIsSpecified(QString);
     void sigFileIsLoaded(bool);
     void sigNeedDisplayWord(QString);
     void sigWordChecked(bool);
@@ -40,6 +41,8 @@ signals:
     void sigEndExamination(bool);
 
 private:
+    bool loadWords();
+    void addTestWords();
     void askNextWord();
 
     Ui::Window *ui;

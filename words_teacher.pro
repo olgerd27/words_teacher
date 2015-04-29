@@ -16,12 +16,16 @@ SOURCES += main.cpp\
         window.cpp \
     wordwt.cpp \
     word_teacher.cpp \
-    results_controller.cpp
+    results_controller.cpp \
+    words_reader.cpp
 
 HEADERS  += window.h \
     wordwt.h \
     word_teacher.h \
     results_controller.h \
-    reimplemented_widgets.h
+    reimplemented_widgets.h \
+    words_reader.h
 
 FORMS    += window.ui
+
+OTHER_FILES +=
