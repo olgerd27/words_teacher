@@ -73,12 +73,12 @@ void Window::slotLoadData()
 //        addTestWords();
         if (!loadWords()) return;
     }
-    catch (std::exception &ex) {
+    catch (std::runtime_error &ex) {
         QMessageBox::critical(this, tr("Error load words"), ex.what());
         return;
     }
     catch (...) {
-        QMessageBox::critical(this, tr("Unknow error"), tr("Undefined error occured"));
+        QMessageBox::critical(this, tr("Error load words"), tr("Undefined error occured"));
         return;
     }
 
@@ -89,11 +89,13 @@ void Window::slotLoadData()
 
 bool Window::loadWords()
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("Load words from a file"), "", tr("Words (*.txt *.trsl)"));
+    QString filename = QFileDialog::getOpenFileName(this, tr("Load words from a file"), "",
+                                                    tr("Words (*.txt *.trsl)"));
     if (filename.isEmpty()) return false;
     emit sigFileNameIsSpecified(filename);
 
     WordsReader reader(filename, '-', ',');
+    connect(&reader, SIGNAL(sigWarningOccured(QString, QString)), this, SLOT(slotShowWarning(QString, QString)));
     WordWT *word = 0;
     while (word = reader.getWord())
         m_teacher->addWord(word);
@@ -116,10 +118,6 @@ void Window::addTestWords()
     word->addTranslation("c");
     m_teacher->addWord(word);
 
-//    word = new WordWT("ddd");
-//    word->addTranslation("DDD");
-//    m_teacher->addWord(word);
-
 //    while (word = m_teacher->getWord()) {
 //        qDebug() << *word;
 //    }
@@ -136,15 +134,6 @@ void Window::slotDontKnowWord()
 {
     if (!m_examIsFinished) emit sigWordChecked(false);
     askNextWord();
-}
-
-void Window::slotAbout()
-{
-
-    QString text = QString("The <b>") + windowTitle() + "</b> application.<br>"
-                "The app helps to study any language words and its translations.<br><br>"
-                "(C) M.O.I., Mykolaiv, Ukraine - 2015.";
-    QMessageBox::about(this, tr("About"), tr(text.toUtf8()));
 }
 
 void Window::askNextWord()
@@ -168,4 +157,18 @@ void Window::askNextWord()
         }
     }
     emit sigNeedDisplayWord( m_currentWord->word(WordWT::GetWithRepeat).c_str() );
+}
+
+void Window::slotShowWarning(const QString &title, const QString &msg)
+{
+    QMessageBox::warning(this, title, msg);
+}
+
+void Window::slotAbout()
+{
+
+    QString text = QString("The <b>") + windowTitle() + "</b> application.<br>"
+                "The app helps to study any language words and its translations.<br><br>"
+                "(C) M.O.I., Mykolaiv, Ukraine - 2015.";
+    QMessageBox::about(this, tr("About"), tr(text.toUtf8()));
 }

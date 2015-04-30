@@ -14,9 +14,21 @@ class ResultsController;
  * TODO: there are need to implement the Settings widget, that calls by clicking to the Settings push button.
  * Settings widget can to have:
  * - repeate word quantity;
- * - symbol separated word and translation words;
- * - symbol separated translation words.
+ * - input files encoding: Linux - "UTF-8", Windows - "windows-1251", ...
+ *   (this allow user to work with a text files, that saved in the another OS and encoding then current);
+ * - symbol, separated word and translation words;
+ * - symbol, separated translation words.
  */
+
+/*
+ * TODO: add a button "Restart" for restarting examination.
+ */
+
+/*
+ * TODO: add the widget for showing right translations after every attempt of user translate a word.
+ *
+ */
+
 class Window : public QWidget
 {
     Q_OBJECT
@@ -24,6 +36,9 @@ class Window : public QWidget
 public:
     explicit Window(QWidget *parent = 0);
     ~Window();
+
+public slots:
+    void slotShowWarning(const QString &title, const QString &msg);
 
 private slots:
     void slotLoadData();

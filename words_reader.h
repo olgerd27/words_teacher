@@ -12,8 +12,11 @@ public:
     ~WordsReader();
     WordWT * getWord();
 
+signals:
+    void sigWarningOccured(const QString &title, const QString &msg) const;
+
 private:
-    WordWT * parseWordAndTranslations(const QByteArray &line) const;
+    WordWT * parseWordAndTranslations(const QString &line) const;
 
     const char m_sep_wt, m_sep_t;
     int m_lineCount;

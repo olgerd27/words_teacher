@@ -29,7 +29,7 @@ private:
 
     typedef std::vector<WordWT*> T_vocabulary;
 
-    enum { maxRepeatsQuantity = 3 };
+    enum { maxRepeatsQuantity = 1 };
 
     T_vocabulary m_vcblr;
     T_vocabulary m_vcblr_copy;
