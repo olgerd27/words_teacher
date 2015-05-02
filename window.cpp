@@ -10,16 +10,12 @@
 #include "wordwt.h"
 #include "words_reader.h"
 
-/*
- * Window
- */
 Window::Window(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Window)
     , m_teacher(new WordTeacher())
     , m_currentWord(0)
     , m_resCtrl(new ResultsController())
-    , m_examIsFinished(false)
 {
     ui->setupUi(this);
 
@@ -28,8 +24,6 @@ Window::Window(QWidget *parent)
     connect(this, SIGNAL(sigFileNameIsSpecified(QString)), ui->m_leFileName, SLOT(setText(QString)));
     connect(this, SIGNAL(sigFileIsLoaded(bool)), ui->m_gbExamination, SLOT(setEnabled(bool)));
     connect(this, SIGNAL(sigFileIsLoaded(bool)), ui->m_gbResults, SLOT(setEnabled(bool)));
-    connect(this, SIGNAL(sigStartExamination()), m_teacher, SLOT(slotDefineWordsQntty()));
-    connect(this, SIGNAL(sigStartExamination()), m_resCtrl, SLOT(slotUpdateResults()));
 
     /* Examination */
     connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_lWordForTranslation, SLOT(setText(QString)));
@@ -37,8 +31,16 @@ Window::Window(QWidget *parent)
     connect(ui->m_leTranslation, SIGNAL(returnPressed()), this, SLOT(slotApplyWord()));
     connect(ui->m_pbApply, SIGNAL(clicked()), this, SLOT(slotApplyWord()));
     connect(ui->m_pbDontKnow, SIGNAL(clicked()), this, SLOT(slotDontKnowWord()));
+    connect(ui->m_pbRestart, SIGNAL(clicked()), this, SLOT(slotRestartExamination()));
+
+    connect(this, SIGNAL(sigStartExamination()), m_teacher, SLOT(slotRestartTeaching()));
+    connect(this, SIGNAL(sigStartExamination()), m_teacher, SLOT(slotDefineWordsQntty()));
+    connect(this, SIGNAL(sigStartExamination()), m_resCtrl, SLOT(slotUpdateResults()));
+
     connect(this, SIGNAL(sigEndExamination(bool)), ui->m_pbApply, SLOT(setDisabled(bool)));
-    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_pbDontKnow, SLOT(slotShowMaybeRestart(bool)));
+    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_pbDontKnow, SLOT(setDisabled(bool)));
+    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_leTranslation, SLOT(setDisabled(bool)));
+    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_pbRestart, SLOT(setFocus()));
     connect(this, SIGNAL(sigEndExamination(bool)), ui->m_lWordForTranslation, SLOT(clear()));
 
     /* Results */
@@ -46,7 +48,7 @@ Window::Window(QWidget *parent)
 
     connect(this, SIGNAL(sigWordChecked(bool)), m_resCtrl, SLOT(slotCalcResults(bool)));
     connect(this, SIGNAL(sigWordChecked(bool)), m_resCtrl, SLOT(slotUpdateResults()));
-    connect(this, SIGNAL(sigWordChecked(bool)), ui->m_lAccuracyTranslation, SLOT(slotShowRight(bool)));
+    connect(this, SIGNAL(sigWordChecked(bool)), ui->m_lAccuracyTranslation, SLOT(slotShowRightTranslation(bool)));
 
     connect(m_resCtrl, SIGNAL(sigUpdateWordsRemain(int)), ui->m_lRemainingW_data, SLOT(setNum(int)));
     connect(m_resCtrl, SIGNAL(sigUpdateWordsTransl(int)), ui->m_lTranslatedW_data, SLOT(setNum(int)));
@@ -69,6 +71,7 @@ Window::~Window()
 
 void Window::slotLoadData()
 {
+    // FIXME: need to delete here a previous loaded data
     try {
 //        addTestWords();
         if (!loadWords()) return;
@@ -97,7 +100,7 @@ bool Window::loadWords()
     WordsReader reader(filename, '-', ',');
     connect(&reader, SIGNAL(sigWarningOccured(QString, QString)), this, SLOT(slotShowWarning(QString, QString)));
     WordWT *word = 0;
-    while (word = reader.getWord())
+    while ( (word = reader.getWord()) != 0 )
         m_teacher->addWord(word);
     return true;
 }
@@ -106,16 +109,16 @@ void Window::addTestWords()
 {
     WordWT *word = 0;
 
-    word = new WordWT("I was kind of hoping");
-    word->addTranslation("a");
+    word = new WordWT("One");
+    word->addTranslation("1");
     m_teacher->addWord(word);
 
-    word = new WordWT("B");
-    word->addTranslation("b");
+    word = new WordWT("Two");
+    word->addTranslation("2");
     m_teacher->addWord(word);
 
-    word = new WordWT("C");
-    word->addTranslation("c");
+    word = new WordWT("Three");
+    word->addTranslation("3");
     m_teacher->addWord(word);
 
 //    while (word = m_teacher->getWord()) {
@@ -125,6 +128,7 @@ void Window::addTestWords()
 
 void Window::slotApplyWord()
 {
+    if (!m_currentWord) return;
     QString userTranslation = ui->m_leTranslation->text();
     emit sigWordChecked( m_teacher->isTranslation(m_currentWord, userTranslation.toStdString()) );
     askNextWord();
@@ -132,7 +136,14 @@ void Window::slotApplyWord()
 
 void Window::slotDontKnowWord()
 {
-    if (!m_examIsFinished) emit sigWordChecked(false);
+    emit sigWordChecked(false);
+    askNextWord();
+}
+
+void Window::slotRestartExamination()
+{
+    emit sigEndExamination(false);
+    emit sigStartExamination();
     askNextWord();
 }
 
@@ -145,16 +156,11 @@ void Window::askNextWord()
             tr("There was the last word. Do you want to start examination again?"),
             QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
         if (btn & QMessageBox::Yes) {
-            m_teacher->repeatVocabulary();
             emit sigEndExamination(false);
             emit sigStartExamination();
-            m_examIsFinished = false;
             m_currentWord = m_teacher->getWord();
         }
-        if (btn & QMessageBox::No) {
-            m_examIsFinished = true;
-            return;
-        }
+        if (btn & QMessageBox::No) return;
     }
     emit sigNeedDisplayWord( m_currentWord->word(WordWT::GetWithRepeat).c_str() );
 }
@@ -169,6 +175,6 @@ void Window::slotAbout()
 
     QString text = QString("The <b>") + windowTitle() + "</b> application.<br>"
                 "The app helps to study any language words and its translations.<br><br>"
-                "(C) M.O.I., Mykolaiv, Ukraine - 2015.";
+                "© M.O.I. Mykolaiv, Ukraine - 2015.";
     QMessageBox::about(this, tr("About"), tr(text.toUtf8()));
 }

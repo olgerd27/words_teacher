@@ -23,19 +23,7 @@ void WordWT::addTranslation(const std::string &tr)
     m_translations.push_back(tr);
 }
 
-//std::string WordWT::nextTranslation() const
-//{
-//    static int index = 0;
-//    std::string res;
-//    if (index >= m_translations.size())
-//        index = 0;
-//    else
-//        res = m_translations.at(index);
-//    ++index;
-//    return res;
-//}
-
-bool WordWT::findTranslation(const std::string &tr) const
+bool WordWT::isTranslation(const std::string &tr) const
 {
     return std::find(m_translations.begin(), m_translations.end(), tr) != m_translations.end();
 }

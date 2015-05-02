@@ -16,13 +16,13 @@ public:
     void addWord(WordWT *word);
     WordWT * getWord();
     bool isTranslation(const WordWT *word, const std::string &translation) const;
-    void repeatVocabulary();
 
 signals:
-    int sigWordsQnttyDefined(int);
+    void sigWordsQnttyDefined(int);
 
 public slots:
     void slotDefineWordsQntty();
+    void slotRestartTeaching();
 
 private:
     bool wordIsStudied(WordWT *word);

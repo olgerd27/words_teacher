@@ -1,4 +1,3 @@
-#include <QDebug>
 #include "results_controller.h"
 
 ResultsController::ResultsController(QObject *parent)

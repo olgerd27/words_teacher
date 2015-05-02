@@ -22,8 +22,7 @@ public:
     std::string word(WordWT::getWordMode mode = WordWT::GetWithRepeat);
 
     void addTranslation(const std::string &tr);
-//    std::string nextTranslation() const;
-    bool findTranslation(const std::string &tr) const;
+    bool isTranslation(const std::string &tr) const;
 
     int repeatsCount() const;
     void flush();

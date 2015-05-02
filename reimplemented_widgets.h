@@ -24,7 +24,7 @@ protected:
     }
 
 public slots:
-   void slotShowRight(bool b)
+   void slotShowRightTranslation(bool b)
    {
        QString text = b ? tr("Right") : tr("Wrong");
        QString color = b ? "green" : "red";

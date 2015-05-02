@@ -18,6 +18,7 @@ WordsReader::~WordsReader()
     close();
 }
 
+//#include <QTextCodec>
 WordWT * WordsReader::getWord()
 {
     static QTextStream stream(this);
@@ -49,12 +50,8 @@ WordWT * WordsReader::parseWordAndTranslations(const QString &line) const
         throw std::runtime_error( (tr("No one translation was found in the file to the: ") +
                                    word_trans.at(0)).toStdString() );
 
-    QString temp;
-    foreach (QString tr, trans) {
-        temp = tr.trimmed();
-//        qDebug() << temp;
-        word->addTranslation(temp.toStdString());
+    foreach (const QString &trWord, trans) {
+        word->addTranslation(trWord.trimmed().toStdString());
     }
-//    qDebug() << "---------";
     return word;
 }

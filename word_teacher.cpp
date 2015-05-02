@@ -1,4 +1,5 @@
-#include <algorithm>
+﻿#include <algorithm>
+#include <iterator>
 #include <ctime>
 
 #include "word_teacher.h"
@@ -45,9 +46,8 @@ WordWT * WordTeacher::getWord()
 bool WordTeacher::wordIsStudied(WordWT *word)
 {
     bool b = word->repeatsCount() >= maxRepeatsQuantity;
-//    if (b) qDebug() << word->word(WordWT::GetWithoutRepeat).c_str() << " was studied";
     if (b) {
-        m_vcblr_copy.push_back(word);
+        m_vcblr_copy.push_back(word); // copying the word, that can to use when user will want to restart words teaching
         m_vcblr.erase( std::find(m_vcblr.begin(), m_vcblr.end(), word) ); // erase studied word from vocabulary
     }
     return b;
@@ -55,17 +55,19 @@ bool WordTeacher::wordIsStudied(WordWT *word)
 
 bool WordTeacher::isTranslation(const WordWT *word, const std::string &translation) const
 {
-    return word->findTranslation(translation);
+    return word->isTranslation(translation);
 }
 
 void flushWord(WordWT *w) { w->flush(); }
 
-void WordTeacher::repeatVocabulary()
+void WordTeacher::slotRestartTeaching()
 {
-    /* Restart studying the words of current vocabulary */
-    m_vcblr.assign(m_vcblr_copy.begin(), m_vcblr_copy.end());
+    /* Restart studying the words of the current vocabulary */
+    if (!m_vcblr_copy.empty()) {
+        std::copy(m_vcblr_copy.begin(), m_vcblr_copy.end(), std::back_inserter(m_vcblr));
+        m_vcblr_copy.clear();
+    }
     std::for_each(m_vcblr.begin(), m_vcblr.end(), flushWord);
-    m_vcblr_copy.clear();
 }
 
 void WordTeacher::slotDefineWordsQntty()

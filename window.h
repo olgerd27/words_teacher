@@ -21,10 +21,6 @@ class ResultsController;
  */
 
 /*
- * TODO: add a button "Restart" for restarting examination.
- */
-
-/*
  * TODO: add the widget for showing right translations after every attempt of user translate a word.
  *
  */
@@ -44,6 +40,7 @@ private slots:
     void slotLoadData();
     void slotApplyWord();
     void slotDontKnowWord();
+    void slotRestartExamination();
     void slotAbout();
 
 signals:
@@ -64,7 +61,6 @@ private:
     WordTeacher *m_teacher;
     WordWT *m_currentWord;
     ResultsController *m_resCtrl;
-    bool m_examIsFinished;
 };
 
 #endif // WINDOW_H
