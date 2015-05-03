@@ -3,9 +3,10 @@
 
 #include <QLabel>
 #include <QPushButton>
+#include <QLineEdit>
 
 /*
- * Lbl_AccuracyTranslation
+ * Label that shows its texts in the corresponding color
  */
 class Lbl_AccuracyTranslation : public QLabel
 {
@@ -38,13 +39,13 @@ private:
 };
 
 /*
- * PB_Dontknow_Next
+ * Push button with a changed text caption
  */
-class PB_Dontknow_Next : public QPushButton
+class PB_ChangedCaption : public QPushButton
 {
     Q_OBJECT
 public:
-    PB_Dontknow_Next(QWidget *parent)
+    PB_ChangedCaption(QWidget *parent)
         : QPushButton(parent)
     {
     }
@@ -53,6 +54,24 @@ public slots:
     void slotShowMaybeRestart(bool b)
     {
         b ? setText(tr("&Maybe restart?")) : setText(tr("&Don't know"));
+    }
+};
+
+/*
+ * Line edit with a different font for the Windows and Linux OS
+ */
+class LE_FontOS : public QLineEdit
+{
+    Q_OBJECT
+public:
+    LE_FontOS(QWidget *parent)
+        : QLineEdit(parent)
+    {
+#if defined Q_OS_WIN // if there are Windows OS
+        setFont(QFont("Courier New", 11, QFont::Normal));
+#elif defined Q_OS_LINUX // if there are Linux OS
+        setFont(QFont("Ubuntu Mono", 11, QFont::Normal));
+#endif
     }
 };
 

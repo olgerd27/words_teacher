@@ -45,17 +45,12 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="m_leFileName">
+      <widget class="LE_FontOS" name="m_leFileName">
        <property name="minimumSize">
         <size>
          <width>350</width>
          <height>0</height>
         </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Courier New</family>
-        </font>
        </property>
        <property name="readOnly">
         <bool>true</bool>
@@ -576,6 +571,11 @@
   <customwidget>
    <class>Lbl_AccuracyTranslation</class>
    <extends>QLabel</extends>
+   <header>reimplemented_widgets.h</header>
+  </customwidget>
+  <customwidget>
+   <class>LE_FontOS</class>
+   <extends>QLineEdit</extends>
    <header>reimplemented_widgets.h</header>
   </customwidget>
  </customwidgets>
