@@ -33,14 +33,17 @@ void WordTeacher::addWord(WordWT *word)
     if (word) m_vcblr.push_back(word);
 }
 
-WordWT * WordTeacher::getWord()
+void WordTeacher::slotGetWord()
 {
     WordWT *word = 0;
     do {
-        if (m_vcblr.empty()) return 0;
+        if (m_vcblr.empty()) {
+            emit sigSendWord(0);
+            return;
+        }
         word = m_vcblr.at( rand() % m_vcblr.size() );
     } while (wordIsStudied(word));
-    return word;
+    emit sigSendWord(word);
 }
 
 bool WordTeacher::wordIsStudied(WordWT *word)

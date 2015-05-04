@@ -14,14 +14,15 @@ public:
     ~WordTeacher();
 
     void addWord(WordWT *word);
-    WordWT * getWord();
     bool isTranslation(const WordWT *word, const std::string &translation) const;
 
 signals:
+    void sigSendWord(WordWT *);
     void sigWordsQnttyDefined(int);
     void sigDisplayAnswer(const QString &);
 
 public slots:
+    void slotGetWord();
     void slotRestartTeaching();
     void slotDefineWordsQntty();
     void slotGetTranslations(const WordWT *, const QString &);

@@ -33,6 +33,7 @@ public slots:
 
 private slots:
     void slotLoadData();
+    void slotGetCurrentWord(WordWT *);
     void slotApplyWord();
     void slotRestartExamination();
     void slotAbout();
@@ -40,6 +41,7 @@ private slots:
 signals:
     void sigFileNameIsSpecified(QString);
     void sigFileIsLoaded(bool);
+    void sigNeedGetWord();
     void sigNeedDisplayWord(QString);
     void sigWordChecked(bool);
     void sigNeedDisplayAnswer(const WordWT *, const QString &);

@@ -26,6 +26,15 @@ Window::Window(QWidget *parent)
     connect(this, SIGNAL(sigFileIsLoaded(bool)), ui->m_gbExamination, SLOT(setEnabled(bool)));
     connect(this, SIGNAL(sigFileIsLoaded(bool)), ui->m_gbResults, SLOT(setEnabled(bool)));
 
+    /* Get a new word */
+    connect(this, SIGNAL(sigNeedGetWord()), m_teacher, SLOT(slotGetWord()));
+    connect(m_teacher, SIGNAL(sigSendWord(WordWT*)), this, SLOT(slotGetCurrentWord(WordWT*)));
+
+    /* Start Examination */
+    connect(this, SIGNAL(sigStartExamination()), m_teacher, SLOT(slotRestartTeaching()));
+    connect(this, SIGNAL(sigStartExamination()), m_teacher, SLOT(slotDefineWordsQntty()));
+    connect(this, SIGNAL(sigStartExamination()), m_resCtrl, SLOT(slotUpdateResults()));
+
     /* Examination */
     connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_lRightWrong, SLOT(clear()));
     connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_lAnswerRight, SLOT(clear()));
@@ -38,11 +47,6 @@ Window::Window(QWidget *parent)
 
     /* Switching caption on the push button */
     connect(this, SIGNAL(sigSetPBAnswerCaption(QString)), ui->m_pbAnswerNext, SLOT(slotSetCaption(QString)));
-
-    /* Start Examination */
-    connect(this, SIGNAL(sigStartExamination()), m_teacher, SLOT(slotRestartTeaching()));
-    connect(this, SIGNAL(sigStartExamination()), m_teacher, SLOT(slotDefineWordsQntty()));
-    connect(this, SIGNAL(sigStartExamination()), m_resCtrl, SLOT(slotUpdateResults()));
 
     /* Display answer */
     connect(this, SIGNAL(sigNeedDisplayAnswer(const WordWT*,QString)),
@@ -101,6 +105,11 @@ void Window::slotLoadData()
     askNextWord();
 }
 
+void Window::slotGetCurrentWord(WordWT *w)
+{
+    m_currentWord = w;
+}
+
 bool Window::loadWords()
 {
     QString filename = QFileDialog::getOpenFileName(this, tr("Load words from a file"), "",
@@ -144,10 +153,10 @@ void Window::slotApplyWord()
         QString userTranslation = ui->m_leYourTranslation->text();
         emit sigWordChecked( m_teacher->isTranslation(m_currentWord, userTranslation.toStdString()) );
         emit sigNeedDisplayAnswer(m_currentWord, userTranslation); // cause the display translation answer in the window
-        emit sigSetPBAnswerCaption(  tr("&Next word") );
+        emit sigSetPBAnswerCaption( tr("&Next word") );
     }
     else {
-        emit sigSetPBAnswerCaption(  tr("&Answer") );
+        emit sigSetPBAnswerCaption( tr("&Answer") );
         askNextWord();
     }
     m_applyPressed = !m_applyPressed;
@@ -162,7 +171,7 @@ void Window::slotRestartExamination()
 
 void Window::askNextWord()
 {
-    m_currentWord = m_teacher->getWord();
+    emit sigNeedGetWord();
     if (!m_currentWord) {
         emit sigEndExamination(true);
         QMessageBox::StandardButton btn = QMessageBox::information(this, tr("All words was studied"),
@@ -171,7 +180,7 @@ void Window::askNextWord()
         if (btn & QMessageBox::Yes) {
             emit sigEndExamination(false);
             emit sigStartExamination();
-            m_currentWord = m_teacher->getWord();
+            emit sigNeedGetWord();
         }
         if (btn & QMessageBox::No) return;
     }
