@@ -20,11 +20,6 @@ class ResultsController;
  * - symbol, separated translation words.
  */
 
-/*
- * TODO: add the widget for showing right translations after every attempt of user translate a word.
- *
- */
-
 class Window : public QWidget
 {
     Q_OBJECT
@@ -39,7 +34,6 @@ public slots:
 private slots:
     void slotLoadData();
     void slotApplyWord();
-    void slotDontKnowWord();
     void slotRestartExamination();
     void slotAbout();
 
@@ -51,6 +45,7 @@ signals:
     void sigNeedDisplayAnswer(const WordWT *, const QString &);
     void sigStartExamination();
     void sigEndExamination(bool);
+    void sigSetPBAnswerCaption(const QString &);
 
 private:
     bool loadWords();
@@ -61,7 +56,7 @@ private:
     WordTeacher *m_teacher;
     WordWT *m_currentWord;
     ResultsController *m_resCtrl;
-//    bool m_applyPressed;
+    bool m_applyPressed;
 };
 
 #endif // WINDOW_H

@@ -117,7 +117,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="m_leTranslation">
+       <widget class="QLineEdit" name="m_leYourTranslation">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -139,7 +139,7 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="Lbl_AccuracyTranslation" name="m_lAccuracyTranslation">
+       <widget class="Lbl_AccuracyTranslation" name="m_lRightWrong">
         <property name="minimumSize">
          <size>
           <width>200</width>
@@ -184,7 +184,7 @@
          <set>Qt::AlignCenter</set>
         </property>
         <property name="buddy">
-         <cstring>m_leTranslation</cstring>
+         <cstring>m_leYourTranslation</cstring>
         </property>
        </widget>
       </item>
@@ -204,28 +204,15 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="m_pbApply">
+         <widget class="PB_SwitchingCaption" name="m_pbAnswerNext">
           <property name="minimumSize">
            <size>
-            <width>75</width>
+            <width>90</width>
             <height>0</height>
            </size>
           </property>
           <property name="text">
-           <string>&amp;Apply</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="m_pbDontKnow">
-          <property name="minimumSize">
-           <size>
-            <width>75</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>&amp;Don't know</string>
+           <string>&amp;Answer</string>
           </property>
          </widget>
         </item>
@@ -233,7 +220,7 @@
          <widget class="QPushButton" name="m_pbRestart">
           <property name="minimumSize">
            <size>
-            <width>75</width>
+            <width>90</width>
             <height>0</height>
            </size>
           </property>
@@ -614,13 +601,17 @@
    <extends>QLineEdit</extends>
    <header>reimplemented_widgets.h</header>
   </customwidget>
+  <customwidget>
+   <class>PB_SwitchingCaption</class>
+   <extends>QPushButton</extends>
+   <header>reimplemented_widgets.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>m_pbLoad</tabstop>
   <tabstop>m_leFileName</tabstop>
-  <tabstop>m_leTranslation</tabstop>
-  <tabstop>m_pbApply</tabstop>
-  <tabstop>m_pbDontKnow</tabstop>
+  <tabstop>m_leYourTranslation</tabstop>
+  <tabstop>m_pbAnswerNext</tabstop>
   <tabstop>m_pbAbout</tabstop>
   <tabstop>m_pbExit</tabstop>
  </tabstops>

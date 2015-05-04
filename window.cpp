@@ -16,7 +16,7 @@ Window::Window(QWidget *parent)
     , m_teacher(new WordTeacher())
     , m_currentWord(0)
     , m_resCtrl(new ResultsController())
-//    , m_applyPressed(true)
+    , m_applyPressed(true)
 {
     ui->setupUi(this);
 
@@ -27,24 +27,32 @@ Window::Window(QWidget *parent)
     connect(this, SIGNAL(sigFileIsLoaded(bool)), ui->m_gbResults, SLOT(setEnabled(bool)));
 
     /* Examination */
+    connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_lRightWrong, SLOT(clear()));
+    connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_lAnswerRight, SLOT(clear()));
     connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_lWordForTranslation, SLOT(setText(QString)));
-    connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_leTranslation, SLOT(setFocus()));
-    connect(ui->m_leTranslation, SIGNAL(returnPressed()), this, SLOT(slotApplyWord()));
-    connect(ui->m_pbApply, SIGNAL(clicked()), this, SLOT(slotApplyWord()));
-    connect(ui->m_pbDontKnow, SIGNAL(clicked()), this, SLOT(slotDontKnowWord()));
+    connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_leYourTranslation, SLOT(setFocus()));
+    connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_leYourTranslation, SLOT(clear()));
+    connect(ui->m_leYourTranslation, SIGNAL(returnPressed()), this, SLOT(slotApplyWord()));
+    connect(ui->m_pbAnswerNext, SIGNAL(clicked()), this, SLOT(slotApplyWord()));
     connect(ui->m_pbRestart, SIGNAL(clicked()), this, SLOT(slotRestartExamination()));
 
+    /* Switching caption on the push button */
+    connect(this, SIGNAL(sigSetPBAnswerCaption(QString)), ui->m_pbAnswerNext, SLOT(slotSetCaption(QString)));
+
+    /* Start Examination */
     connect(this, SIGNAL(sigStartExamination()), m_teacher, SLOT(slotRestartTeaching()));
     connect(this, SIGNAL(sigStartExamination()), m_teacher, SLOT(slotDefineWordsQntty()));
     connect(this, SIGNAL(sigStartExamination()), m_resCtrl, SLOT(slotUpdateResults()));
 
+    /* Display answer */
     connect(this, SIGNAL(sigNeedDisplayAnswer(const WordWT*,QString)),
             m_teacher, SLOT(slotGetTranslations(const WordWT*,QString)));
     connect(m_teacher, SIGNAL(sigDisplayAnswer(QString)), ui->m_lAnswerRight, SLOT(setText(QString)));
+    connect(this, SIGNAL(sigWordChecked(bool)), ui->m_lRightWrong, SLOT(slotShowRightWrong(bool)));
+    connect(this, SIGNAL(sigWordChecked(bool)), ui->m_pbAnswerNext, SLOT(setFocus()));
 
-    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_pbApply, SLOT(setDisabled(bool)));
-    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_pbDontKnow, SLOT(setDisabled(bool)));
-    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_leTranslation, SLOT(setDisabled(bool)));
+    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_pbAnswerNext, SLOT(setDisabled(bool)));
+    connect(this, SIGNAL(sigEndExamination(bool)), ui->m_leYourTranslation, SLOT(setDisabled(bool)));
     connect(this, SIGNAL(sigEndExamination(bool)), ui->m_pbRestart, SLOT(setFocus()));
     connect(this, SIGNAL(sigEndExamination(bool)), ui->m_lWordForTranslation, SLOT(clear()));
 
@@ -53,13 +61,11 @@ Window::Window(QWidget *parent)
 
     connect(this, SIGNAL(sigWordChecked(bool)), m_resCtrl, SLOT(slotCalcResults(bool)));
     connect(this, SIGNAL(sigWordChecked(bool)), m_resCtrl, SLOT(slotUpdateResults()));
-    connect(this, SIGNAL(sigWordChecked(bool)), ui->m_lAccuracyTranslation, SLOT(slotShowRightTranslation(bool)));
 
     connect(m_resCtrl, SIGNAL(sigUpdateWordsRemain(int)), ui->m_lRemainingW_data, SLOT(setNum(int)));
     connect(m_resCtrl, SIGNAL(sigUpdateWordsTransl(int)), ui->m_lTranslatedW_data, SLOT(setNum(int)));
     connect(m_resCtrl, SIGNAL(sigUpdateMark(int)), ui->m_lmark_data, SLOT(setNum(int)));
     connect(m_resCtrl, SIGNAL(sigUpdateConclusion(QString)), ui->m_lConclusion, SLOT(setText(QString)));
-    connect(m_resCtrl, SIGNAL(sigResultsUpdated()), ui->m_leTranslation, SLOT(clear()));
 
     /* Others */
     connect(ui->m_pbAbout, SIGNAL(clicked()), this, SLOT(slotAbout()));
@@ -134,17 +140,17 @@ void Window::addTestWords()
 void Window::slotApplyWord()
 {
     if (!m_currentWord) return;
-    QString userTranslation = ui->m_leTranslation->text();
-    emit sigWordChecked( m_teacher->isTranslation(m_currentWord, userTranslation.toStdString()) );
-    emit sigNeedDisplayAnswer(m_currentWord, userTranslation); // cause the display translation answer in the window
-    askNextWord();
-//    m_applyPressed = !m_applyPressed;
-}
-
-void Window::slotDontKnowWord()
-{
-    emit sigWordChecked(false);
-    askNextWord();
+    if (m_applyPressed) {
+        QString userTranslation = ui->m_leYourTranslation->text();
+        emit sigWordChecked( m_teacher->isTranslation(m_currentWord, userTranslation.toStdString()) );
+        emit sigNeedDisplayAnswer(m_currentWord, userTranslation); // cause the display translation answer in the window
+        emit sigSetPBAnswerCaption(  tr("&Next word") );
+    }
+    else {
+        emit sigSetPBAnswerCaption(  tr("&Answer") );
+        askNextWord();
+    }
+    m_applyPressed = !m_applyPressed;
 }
 
 void Window::slotRestartExamination()

@@ -15,45 +15,46 @@ public:
     Lbl_AccuracyTranslation(QWidget *parent)
         : QLabel(parent)
     {
-        m_timerID = startTimer(10); // timer initialization
+//        m_timerID = startTimer(10); // timer initialization
     }
 
-protected:
-    virtual void timerEvent(QTimerEvent *)
-    {
-        setText("");
-    }
+//protected:
+//    virtual void timerEvent(QTimerEvent *)
+//    {
+//        setText("");
+//    }
 
 public slots:
-   void slotShowRightTranslation(bool b)
+   void slotShowRightWrong(bool b)
    {
        QString text = b ? tr("Right") : tr("Wrong");
        QString color = b ? "green" : "red";
        setText(QString("<FONT COLOR=%1><CENTER> %2</CENTER></FONT>").arg(color).arg(text));
-       killTimer(m_timerID);
-       m_timerID = startTimer(2000);
+//       killTimer(m_timerID);
+//       m_timerID = startTimer(2000);
    }
 
 private:
-   int m_timerID;
+//   int m_timerID;
 };
 
 /*
- * Push button with a changed text caption
+ * Push button with a switching text caption
  */
-class PB_ChangedCaption : public QPushButton
+class PB_SwitchingCaption : public QPushButton
 {
     Q_OBJECT
 public:
-    PB_ChangedCaption(QWidget *parent)
+    PB_SwitchingCaption(QWidget *parent)
         : QPushButton(parent)
     {
+        setText(tr("Default caption"));
     }
 
 public slots:
-    void slotShowMaybeRestart(bool b)
+    void slotSetCaption(const QString &caption)
     {
-        b ? setText(tr("&Maybe restart?")) : setText(tr("&Don't know"));
+        setText(caption);
     }
 };
 
