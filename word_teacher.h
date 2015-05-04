@@ -19,10 +19,12 @@ public:
 
 signals:
     void sigWordsQnttyDefined(int);
+    void sigDisplayAnswer(const QString &);
 
 public slots:
-    void slotDefineWordsQntty();
     void slotRestartTeaching();
+    void slotDefineWordsQntty();
+    void slotGetTranslations(const WordWT *, const QString &);
 
 private:
     bool wordIsStudied(WordWT *word);

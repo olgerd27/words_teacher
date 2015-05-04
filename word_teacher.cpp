@@ -75,3 +75,15 @@ void WordTeacher::slotDefineWordsQntty()
     emit sigWordsQnttyDefined( m_vcblr.size() * maxRepeatsQuantity );
 }
 
+void WordTeacher::slotGetTranslations(const WordWT *wwt, const QString &userTranslation)
+{
+    QString res;
+    const WordWT::T_translations &C_translations = wwt->m_translations;
+    WordWT::T_translations::const_iterator cit;
+    for (cit = C_translations.begin(); cit != C_translations.end(); ++cit) {
+        res += (*cit == userTranslation.toStdString()) ?
+                    QString("<b><u>%1</u></b>").arg(cit->c_str()) : QString(cit->c_str());
+        res += (cit != C_translations.end() - 1) ? ";   " : "";
+    }
+    emit sigDisplayAnswer(res);
+}

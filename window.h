@@ -48,7 +48,7 @@ signals:
     void sigFileIsLoaded(bool);
     void sigNeedDisplayWord(QString);
     void sigWordChecked(bool);
-    void sigWordDontChecked();
+    void sigNeedDisplayAnswer(const WordWT *, const QString &);
     void sigStartExamination();
     void sigEndExamination(bool);
 
@@ -61,6 +61,7 @@ private:
     WordTeacher *m_teacher;
     WordWT *m_currentWord;
     ResultsController *m_resCtrl;
+//    bool m_applyPressed;
 };
 
 #endif // WINDOW_H

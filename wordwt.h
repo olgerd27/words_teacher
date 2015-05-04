@@ -5,6 +5,8 @@
 #include <string>
 #include <QDebug>
 
+class WordTeacher;
+
 /*
  * Word with translations
  */
@@ -27,6 +29,7 @@ public:
     int repeatsCount() const;
     void flush();
 
+    friend class WordTeacher;
     friend QDebug operator<<(QDebug qdbg, WordWT &w);
 
 private:
