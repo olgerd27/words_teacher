@@ -14,10 +14,10 @@ public:
     ~WordTeacher();
 
     void addWord(WordWT *word);
-    bool isTranslation(const WordWT *word, const std::string &translation) const;
+    bool hasTranslation(const WordWT *word, const std::string &translation) const;
 
 signals:
-    void sigSendWord(WordWT *);
+    void sigWordSended(WordWT *);
     void sigWordsQnttyDefined(int);
     void sigDisplayAnswer(const QString &);
 

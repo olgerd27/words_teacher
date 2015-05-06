@@ -28,7 +28,7 @@ Window::Window(QWidget *parent)
 
     /* Get a new word */
     connect(this, SIGNAL(sigNeedGetWord()), m_teacher, SLOT(slotGetWord()));
-    connect(m_teacher, SIGNAL(sigSendWord(WordWT*)), this, SLOT(slotGetCurrentWord(WordWT*)));
+    connect(m_teacher, SIGNAL(sigWordSended(WordWT*)), this, SLOT(slotGetCurrentWord(WordWT*)));
 
     /* Start Examination */
     connect(this, SIGNAL(sigStartExamination()), m_teacher, SLOT(slotRestartTeaching()));
@@ -41,8 +41,8 @@ Window::Window(QWidget *parent)
     connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_lWordForTranslation, SLOT(setText(QString)));
     connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_leYourTranslation, SLOT(setFocus()));
     connect(this, SIGNAL(sigNeedDisplayWord(QString)), ui->m_leYourTranslation, SLOT(clear()));
-    connect(ui->m_leYourTranslation, SIGNAL(returnPressed()), this, SLOT(slotApplyWord()));
-    connect(ui->m_pbAnswerNext, SIGNAL(clicked()), this, SLOT(slotApplyWord()));
+    connect(ui->m_leYourTranslation, SIGNAL(returnPressed()), this, SLOT(slotAnswerWord()));
+    connect(ui->m_pbAnswerNext, SIGNAL(clicked()), this, SLOT(slotAnswerWord()));
     connect(ui->m_pbRestart, SIGNAL(clicked()), this, SLOT(slotRestartExamination()));
 
     /* Switching caption on the push button */
@@ -88,8 +88,8 @@ void Window::slotLoadData()
 {
     // FIXME: need to delete here a previous loaded data
     try {
-//        addTestWords();
-        if (!loadWords()) return;
+        addTestWords();
+//        if (!loadWords()) return;
     }
     catch (std::runtime_error &ex) {
         QMessageBox::critical(this, tr("Error load words"), ex.what());
@@ -129,16 +129,16 @@ void Window::addTestWords()
 {
     WordWT *word = 0;
 
-    word = new WordWT("One");
-    word->addTranslation("1");
+    word = new WordWT("1");
+    word->addTranslation("One");
     m_teacher->addWord(word);
 
-    word = new WordWT("Two");
-    word->addTranslation("2");
+    word = new WordWT("2");
+    word->addTranslation("Two");
     m_teacher->addWord(word);
 
-    word = new WordWT("Three");
-    word->addTranslation("3");
+    word = new WordWT("3");
+    word->addTranslation("Three");
     m_teacher->addWord(word);
 
 //    while (word = m_teacher->getWord()) {
@@ -146,13 +146,13 @@ void Window::addTestWords()
 //    }
 }
 
-void Window::slotApplyWord()
+void Window::slotAnswerWord()
 {
     if (!m_currentWord) return;
     if (m_applyPressed) {
         QString userTranslation = ui->m_leYourTranslation->text();
-        emit sigWordChecked( m_teacher->isTranslation(m_currentWord, userTranslation.toStdString()) );
-        emit sigNeedDisplayAnswer(m_currentWord, userTranslation); // cause the display translation answer in the window
+        emit sigWordChecked( m_teacher->hasTranslation(m_currentWord, userTranslation.toStdString()) );
+        emit sigNeedDisplayAnswer(m_currentWord, userTranslation); // display translation answer in the window
         emit sigSetPBAnswerCaption( tr("&Next word") );
     }
     else {

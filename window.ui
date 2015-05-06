@@ -136,6 +136,13 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
        </widget>
       </item>
       <item row="2" column="0">
@@ -574,19 +581,6 @@
      </item>
     </layout>
    </item>
-   <item>
-    <spacer name="verticalSpacer_3">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>5</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
@@ -612,6 +606,7 @@
   <tabstop>m_leFileName</tabstop>
   <tabstop>m_leYourTranslation</tabstop>
   <tabstop>m_pbAnswerNext</tabstop>
+  <tabstop>m_pbRestart</tabstop>
   <tabstop>m_pbAbout</tabstop>
   <tabstop>m_pbExit</tabstop>
  </tabstops>
@@ -624,8 +619,8 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>401</x>
-     <y>326</y>
+     <x>584</x>
+     <y>374</y>
     </hint>
     <hint type="destinationlabel">
      <x>225</x>

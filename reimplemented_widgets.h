@@ -29,7 +29,7 @@ public slots:
    {
        QString text = b ? tr("Right") : tr("Wrong");
        QString color = b ? "green" : "red";
-       setText(QString("<FONT COLOR=%1><CENTER> %2</CENTER></FONT>").arg(color).arg(text));
+       setText(QString("<FONT COLOR=%1><CENTER>%2</CENTER></FONT>").arg(color).arg(text));
 //       killTimer(m_timerID);
 //       m_timerID = startTimer(2000);
    }
@@ -69,7 +69,7 @@ public:
         : QLineEdit(parent)
     {
 #if defined Q_OS_WIN // if there are Windows OS
-        setFont(QFont("Courier New", 11, QFont::Normal));
+        setFont(QFont("Courier New", 9, QFont::Normal));
 #elif defined Q_OS_LINUX // if there are Linux OS
         setFont(QFont("Ubuntu Mono", 11, QFont::Normal));
 #endif

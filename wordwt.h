@@ -12,19 +12,23 @@ class WordTeacher;
  */
 class WordWT
 {
+private:
+    typedef std::string T_word;
+    typedef std::vector<T_word> T_arrTransls;
+
 public:
     enum getWordMode {
         GetWithRepeat,   /* word getting with increment repeating */
         GetWithoutRepeat /* word getting without increment repeating */
     };
 
-    WordWT(const std::string &word);
+    WordWT(const T_word &word);
 
-    void setWord(const std::string &word);
-    std::string word(WordWT::getWordMode mode = WordWT::GetWithRepeat);
+    void setWord(const T_word &word);
+    T_word word(WordWT::getWordMode mode = WordWT::GetWithRepeat);
 
-    void addTranslation(const std::string &tr);
-    bool isTranslation(const std::string &tr) const;
+    void addTranslation(const T_word &tr);
+    bool isTranslation(const T_word &tr) const;
 
     int repeatsCount() const;
     void flush();
@@ -33,10 +37,19 @@ public:
     friend QDebug operator<<(QDebug qdbg, WordWT &w);
 
 private:
-    typedef std::vector<std::string> T_translations;
+    /* LowerComparer */
+    class LowerComparer
+    {
+    public:
+        LowerComparer(const T_word &tr);
+        bool operator()(const T_word &tr) const;
 
-    std::string m_word;
-    T_translations m_translations;
+    private:
+        T_word m_tr;
+    };
+
+    T_word m_word;
+    T_arrTransls m_translations;
     int m_checksCount;
 };
 

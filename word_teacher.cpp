@@ -38,12 +38,12 @@ void WordTeacher::slotGetWord()
     WordWT *word = 0;
     do {
         if (m_vcblr.empty()) {
-            emit sigSendWord(0);
+            emit sigWordSended(0);
             return;
         }
         word = m_vcblr.at( rand() % m_vcblr.size() );
     } while (wordIsStudied(word));
-    emit sigSendWord(word);
+    emit sigWordSended(word);
 }
 
 bool WordTeacher::wordIsStudied(WordWT *word)
@@ -56,7 +56,7 @@ bool WordTeacher::wordIsStudied(WordWT *word)
     return b;
 }
 
-bool WordTeacher::isTranslation(const WordWT *word, const std::string &translation) const
+bool WordTeacher::hasTranslation(const WordWT *word, const std::string &translation) const
 {
     return word->isTranslation(translation);
 }
@@ -81,11 +81,13 @@ void WordTeacher::slotDefineWordsQntty()
 void WordTeacher::slotGetTranslations(const WordWT *wwt, const QString &userTranslation)
 {
     QString res;
-    const WordWT::T_translations &C_translations = wwt->m_translations;
-    WordWT::T_translations::const_iterator cit;
+    WordWT::LowerComparer comp(userTranslation.toStdString());
+    const WordWT::T_arrTransls &C_translations = wwt->m_translations;
+    WordWT::T_arrTransls::const_iterator cit;
     for (cit = C_translations.begin(); cit != C_translations.end(); ++cit) {
-        res += (*cit == userTranslation.toStdString()) ?
-                    QString("<b><u>%1</u></b>").arg(cit->c_str()) : QString(cit->c_str());
+        res += (comp(*cit)) ?
+                   QString("<b><u>%1</u></b>").arg(cit->c_str()) :
+                   QString(cit->c_str());
         res += (cit != C_translations.end() - 1) ? ";   " : "";
     }
     emit sigDisplayAnswer(res);

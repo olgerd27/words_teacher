@@ -1,31 +1,34 @@
 #include <algorithm>
 #include "wordwt.h"
 
-WordWT::WordWT(const std::string &word)
+/*
+ * WordWT
+ */
+WordWT::WordWT(const T_word &word)
     : m_word(word)
     , m_checksCount(0)
 {
 }
 
-void WordWT::setWord(const std::string &word)
+void WordWT::setWord(const T_word &word)
 {
     m_word = word;
 }
 
-std::string WordWT::word(WordWT::getWordMode mode)
+WordWT::T_word WordWT::word(WordWT::getWordMode mode)
 {
     if (mode == GetWithRepeat) ++m_checksCount;
     return m_word;
 }
 
-void WordWT::addTranslation(const std::string &tr)
+void WordWT::addTranslation(const T_word &tr)
 {
     m_translations.push_back(tr);
 }
 
-bool WordWT::isTranslation(const std::string &tr) const
+bool WordWT::isTranslation(const T_word &tr) const
 {
-    return std::find(m_translations.begin(), m_translations.end(), tr) != m_translations.end();
+    return std::find_if(m_translations.begin(), m_translations.end(), LowerComparer(tr)) != m_translations.end();
 }
 
 int WordWT::repeatsCount() const
@@ -40,7 +43,30 @@ void WordWT::flush()
 
 QDebug operator<<(QDebug qdbg, WordWT &w)
 {
-    for (WordWT::T_translations::const_iterator it = w.m_translations.begin(); it != w.m_translations.end(); ++it)
+    for (WordWT::T_arrTransls::const_iterator it = w.m_translations.begin(); it != w.m_translations.end(); ++it)
         qdbg << w.word().c_str() << ":" << (*it).c_str();
     return qdbg;
+}
+
+/*
+ * WordWT::LowerCompare
+ */
+WordWT::LowerComparer::LowerComparer(const T_word &tr)
+    : m_tr(tr.begin(), tr.end())
+{
+}
+
+template<typename T>
+bool compareLower(T t1, T t2)
+{
+    return ::tolower(t1) == ::tolower(t2);
+}
+
+bool WordWT::LowerComparer::operator()(const T_word &tr) const
+{
+    /*
+     * first two arguments must be iterators of the "tr", because "m_tr" is a user input and
+     * it can be the empty string (user can not input translation)
+     */
+    return (tr.size() == m_tr.size()) && ( std::equal(tr.begin(), tr.end(), m_tr.begin(), compareLower<T_word::value_type>) );
 }
