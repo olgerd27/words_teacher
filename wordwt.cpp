@@ -44,7 +44,7 @@ void WordWT::flush()
 QDebug operator<<(QDebug qdbg, WordWT &w)
 {
     for (WordWT::T_arrTransls::const_iterator it = w.m_translations.begin(); it != w.m_translations.end(); ++it)
-        qdbg << w.word().c_str() << ":" << (*it).c_str();
+        qdbg << w.word(WordWT::GetWithoutRepeat) << ":" << *it;
     return qdbg;
 }
 
@@ -52,21 +52,22 @@ QDebug operator<<(QDebug qdbg, WordWT &w)
  * WordWT::LowerCompare
  */
 WordWT::LowerComparer::LowerComparer(const T_word &tr)
-    : m_tr(tr.begin(), tr.end())
+    : m_tr(tr)
 {
 }
 
 template<typename T>
 bool compareLower(T t1, T t2)
 {
-    return ::tolower(t1) == ::tolower(t2);
+    return ::tolower_l(t1) == ::tolower_l(t2);
+}
+
+template<> bool compareLower<QChar>(QChar ch1, QChar ch2)
+{
+    return ch1.toLower() == ch2.toLower();
 }
 
 bool WordWT::LowerComparer::operator()(const T_word &tr) const
 {
-    /*
-     * first two arguments must be iterators of the "tr", because "m_tr" is a user input and
-     * it can be the empty string (user can not input translation)
-     */
     return (tr.size() == m_tr.size()) && ( std::equal(tr.begin(), tr.end(), m_tr.begin(), compareLower<T_word::value_type>) );
 }

@@ -88,8 +88,8 @@ void Window::slotLoadData()
 {
     // FIXME: need to delete here a previous loaded data
     try {
-        addTestWords();
-//        if (!loadWords()) return;
+//        addTestWords();
+        if (!loadWords()) return;
     }
     catch (std::runtime_error &ex) {
         QMessageBox::critical(this, tr("Error load words"), ex.what());
@@ -151,7 +151,7 @@ void Window::slotAnswerWord()
     if (!m_currentWord) return;
     if (m_applyPressed) {
         QString userTranslation = ui->m_leYourTranslation->text();
-        emit sigWordChecked( m_teacher->hasTranslation(m_currentWord, userTranslation.toStdString()) );
+        emit sigWordChecked( m_teacher->hasTranslation(m_currentWord, userTranslation) );
         emit sigNeedDisplayAnswer(m_currentWord, userTranslation); // display translation answer in the window
         emit sigSetPBAnswerCaption( tr("&Next word") );
     }
@@ -174,7 +174,7 @@ void Window::askNextWord()
     emit sigNeedGetWord();
     if (!m_currentWord) {
         emit sigEndExamination(true);
-        QMessageBox::StandardButton btn = QMessageBox::information(this, tr("All words was studied"),
+        QMessageBox::StandardButton btn = QMessageBox::question(this, tr("All words was studied"),
             tr("There was the last word. Do you want to start examination again?"),
             QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
         if (btn & QMessageBox::Yes) {
@@ -184,7 +184,7 @@ void Window::askNextWord()
         }
         if (btn & QMessageBox::No) return;
     }
-    emit sigNeedDisplayWord( m_currentWord->word(WordWT::GetWithRepeat).c_str() );
+    emit sigNeedDisplayWord( m_currentWord->word(WordWT::GetWithRepeat) );
 }
 
 void Window::slotShowWarning(const QString &title, const QString &msg)

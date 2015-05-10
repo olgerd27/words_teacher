@@ -2,7 +2,6 @@
 #define WORDWT_H
 
 #include <vector>
-#include <string>
 #include <QDebug>
 
 class WordTeacher;
@@ -13,7 +12,7 @@ class WordTeacher;
 class WordWT
 {
 private:
-    typedef std::string T_word;
+    typedef QString T_word;
     typedef std::vector<T_word> T_arrTransls;
 
 public:

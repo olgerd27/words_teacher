@@ -56,7 +56,7 @@ bool WordTeacher::wordIsStudied(WordWT *word)
     return b;
 }
 
-bool WordTeacher::hasTranslation(const WordWT *word, const std::string &translation) const
+bool WordTeacher::hasTranslation(const WordWT *word, const QString &translation) const
 {
     return word->isTranslation(translation);
 }
@@ -81,13 +81,11 @@ void WordTeacher::slotDefineWordsQntty()
 void WordTeacher::slotGetTranslations(const WordWT *wwt, const QString &userTranslation)
 {
     QString res;
-    WordWT::LowerComparer comp(userTranslation.toStdString());
+    WordWT::LowerComparer comp(userTranslation);
     const WordWT::T_arrTransls &C_translations = wwt->m_translations;
     WordWT::T_arrTransls::const_iterator cit;
     for (cit = C_translations.begin(); cit != C_translations.end(); ++cit) {
-        res += (comp(*cit)) ?
-                   QString("<b><u>%1</u></b>").arg(cit->c_str()) :
-                   QString(cit->c_str());
+        res += (comp(*cit)) ? QString("<b><u>%1</u></b>").arg(*cit) : *cit;
         res += (cit != C_translations.end() - 1) ? ";   " : "";
     }
     emit sigDisplayAnswer(res);

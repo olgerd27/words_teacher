@@ -44,14 +44,14 @@ WordWT * WordsReader::parseWordAndTranslations(const QString &line) const
                                    tr("in the file line") +
                                    QString(" #%2: %3").arg(m_lineCount).arg(line)).toStdString() );
 
-    WordWT *word = new WordWT(word_trans.at(0).toStdString());
+    WordWT *word = new WordWT(word_trans.at(0));
     QStringList trans = word_trans.at(1).split(m_sep_t);
     if (trans.size() == 0)
         throw std::runtime_error( (tr("No one translation was found in the file to the: ") +
                                    word_trans.at(0)).toStdString() );
 
     foreach (const QString &trWord, trans) {
-        word->addTranslation(trWord.trimmed().toStdString());
+        word->addTranslation(trWord.trimmed());
     }
     return word;
 }

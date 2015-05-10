@@ -14,7 +14,7 @@ public:
     ~WordTeacher();
 
     void addWord(WordWT *word);
-    bool hasTranslation(const WordWT *word, const std::string &translation) const;
+    bool hasTranslation(const WordWT *word, const QString &translation) const;
 
 signals:
     void sigWordSended(WordWT *);
