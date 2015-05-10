@@ -14,6 +14,7 @@ public:
     ~WordTeacher();
 
     void addWord(WordWT *word);
+    void clearWords();
     bool hasTranslation(const WordWT *word, const QString &translation) const;
 
 signals:
@@ -35,7 +36,7 @@ private:
     enum { maxRepeatsQuantity = 1 };
 
     T_vocabulary m_vcblr;
-    T_vocabulary m_vcblr_copy;
+    T_vocabulary m_vcblr_studied;
 };
 
 #endif // WORD_TEACHER_H

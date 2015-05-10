@@ -86,7 +86,7 @@ Window::~Window()
 
 void Window::slotLoadData()
 {
-    // FIXME: need to delete here a previous loaded data
+    m_teacher->clearWords(); // TODO: make signal/slot connection in future
     try {
 //        addTestWords();
         if (!loadWords()) return;

@@ -25,12 +25,32 @@ WordTeacher::WordTeacher(QObject *parent)
 
 WordTeacher::~WordTeacher()
 {
-    std::for_each(m_vcblr.begin(), m_vcblr.end(), DeletePtrData());
+    clearWords();
 }
 
 void WordTeacher::addWord(WordWT *word)
 {
     if (word) m_vcblr.push_back(word);
+}
+
+void WordTeacher::clearWords()
+{
+    if (m_vcblr.empty() && m_vcblr_studied.empty()) return;
+
+    /* clear vocabulary with not studied words */
+    std::for_each(m_vcblr.begin(), m_vcblr.end(), DeletePtrData());
+    m_vcblr.clear();
+    T_vocabulary(m_vcblr).swap(m_vcblr);
+
+    /* clear vocabulary with already studied words */
+    std::for_each(m_vcblr_studied.begin(), m_vcblr_studied.end(), DeletePtrData());
+    m_vcblr_studied.clear();
+    T_vocabulary(m_vcblr_studied).swap(m_vcblr_studied);
+}
+
+bool WordTeacher::hasTranslation(const WordWT *word, const QString &translation) const
+{
+    return word->isTranslation(translation);
 }
 
 void WordTeacher::slotGetWord()
@@ -50,15 +70,10 @@ bool WordTeacher::wordIsStudied(WordWT *word)
 {
     bool b = word->repeatsCount() >= maxRepeatsQuantity;
     if (b) {
-        m_vcblr_copy.push_back(word); // copying the word, that can to use when user will want to restart words teaching
+        m_vcblr_studied.push_back(word); // copying the word, that can to use when user will want to restart words teaching
         m_vcblr.erase( std::find(m_vcblr.begin(), m_vcblr.end(), word) ); // erase studied word from vocabulary
     }
     return b;
-}
-
-bool WordTeacher::hasTranslation(const WordWT *word, const QString &translation) const
-{
-    return word->isTranslation(translation);
 }
 
 void flushWord(WordWT *w) { w->flush(); }
@@ -66,9 +81,9 @@ void flushWord(WordWT *w) { w->flush(); }
 void WordTeacher::slotRestartTeaching()
 {
     /* Restart studying the words of the current vocabulary */
-    if (!m_vcblr_copy.empty()) {
-        std::copy(m_vcblr_copy.begin(), m_vcblr_copy.end(), std::back_inserter(m_vcblr));
-        m_vcblr_copy.clear();
+    if (!m_vcblr_studied.empty()) {
+        std::copy(m_vcblr_studied.begin(), m_vcblr_studied.end(), std::back_inserter(m_vcblr));
+        m_vcblr_studied.clear();
     }
     std::for_each(m_vcblr.begin(), m_vcblr.end(), flushWord);
 }
