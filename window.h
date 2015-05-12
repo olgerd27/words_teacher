@@ -58,7 +58,7 @@ private:
     WordTeacher *m_teacher;
     WordWT *m_currentWord;
     ResultsController *m_resCtrl;
-    bool m_applyPressed;
+    bool m_needCheckAnswer;
 };
 
 #endif // WINDOW_H

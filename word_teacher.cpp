@@ -25,7 +25,7 @@ WordTeacher::WordTeacher(QObject *parent)
 
 WordTeacher::~WordTeacher()
 {
-    clearWords();
+    slotClearWords();
 }
 
 void WordTeacher::addWord(WordWT *word)
@@ -33,7 +33,12 @@ void WordTeacher::addWord(WordWT *word)
     if (word) m_vcblr.push_back(word);
 }
 
-void WordTeacher::clearWords()
+bool WordTeacher::hasTranslation(const WordWT *word, const QString &translation) const
+{
+    return word->isTranslation(translation);
+}
+
+void WordTeacher::slotClearWords()
 {
     if (m_vcblr.empty() && m_vcblr_studied.empty()) return;
 
@@ -46,11 +51,6 @@ void WordTeacher::clearWords()
     std::for_each(m_vcblr_studied.begin(), m_vcblr_studied.end(), DeletePtrData());
     m_vcblr_studied.clear();
     T_vocabulary(m_vcblr_studied).swap(m_vcblr_studied);
-}
-
-bool WordTeacher::hasTranslation(const WordWT *word, const QString &translation) const
-{
-    return word->isTranslation(translation);
 }
 
 void WordTeacher::slotGetWord()

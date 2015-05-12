@@ -16,11 +16,12 @@ Window::Window(QWidget *parent)
     , m_teacher(new WordTeacher())
     , m_currentWord(0)
     , m_resCtrl(new ResultsController())
-    , m_applyPressed(true)
+    , m_needCheckAnswer(true)
 {
     ui->setupUi(this);
 
     /* Load data */
+    connect(ui->m_pbLoad, SIGNAL(clicked()), m_teacher, SLOT(slotClearWords()));
     connect(ui->m_pbLoad, SIGNAL(clicked()), this, SLOT(slotLoadData()));
     connect(this, SIGNAL(sigFileNameIsSpecified(QString)), ui->m_leFileName, SLOT(setText(QString)));
     connect(this, SIGNAL(sigFileIsLoaded(bool)), ui->m_gbExamination, SLOT(setEnabled(bool)));
@@ -86,23 +87,23 @@ Window::~Window()
 
 void Window::slotLoadData()
 {
-    m_teacher->clearWords(); // TODO: make signal/slot connection in future
     try {
-//        addTestWords();
-        if (!loadWords()) return;
+        addTestWords();
+//        if (!loadWords()) return;
     }
     catch (std::runtime_error &ex) {
+        emit sigFileIsLoaded(false);
         QMessageBox::critical(this, tr("Error load words"), ex.what());
         return;
     }
     catch (...) {
+        emit sigFileIsLoaded(false);
         QMessageBox::critical(this, tr("Error load words"), tr("Undefined error occured"));
         return;
     }
 
     emit sigFileIsLoaded(true);
-    emit sigStartExamination();
-    askNextWord();
+    slotRestartExamination();
 }
 
 void Window::slotGetCurrentWord(WordWT *w)
@@ -140,26 +141,19 @@ void Window::addTestWords()
     word = new WordWT("3");
     word->addTranslation("Three");
     m_teacher->addWord(word);
-
-//    while (word = m_teacher->getWord()) {
-//        qDebug() << *word;
-//    }
 }
 
 void Window::slotAnswerWord()
 {
     if (!m_currentWord) return;
-    if (m_applyPressed) {
+    if (m_needCheckAnswer) {
         QString userTranslation = ui->m_leYourTranslation->text();
         emit sigWordChecked( m_teacher->hasTranslation(m_currentWord, userTranslation) );
         emit sigNeedDisplayAnswer(m_currentWord, userTranslation); // display translation answer in the window
         emit sigSetPBAnswerCaption( tr("&Next word") );
+        m_needCheckAnswer = false;
     }
-    else {
-        emit sigSetPBAnswerCaption( tr("&Answer") );
-        askNextWord();
-    }
-    m_applyPressed = !m_applyPressed;
+    else askNextWord();
 }
 
 void Window::slotRestartExamination()
@@ -171,6 +165,9 @@ void Window::slotRestartExamination()
 
 void Window::askNextWord()
 {
+    qDebug() << "askNextWord();";
+    m_needCheckAnswer = true;
+    emit sigSetPBAnswerCaption( tr("&Answer") );
     emit sigNeedGetWord();
     if (!m_currentWord) {
         emit sigEndExamination(true);

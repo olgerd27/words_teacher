@@ -14,7 +14,6 @@ public:
     ~WordTeacher();
 
     void addWord(WordWT *word);
-    void clearWords();
     bool hasTranslation(const WordWT *word, const QString &translation) const;
 
 signals:
@@ -23,6 +22,7 @@ signals:
     void sigDisplayAnswer(const QString &);
 
 public slots:
+    void slotClearWords();
     void slotGetWord();
     void slotRestartTeaching();
     void slotDefineWordsQntty();

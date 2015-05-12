@@ -59,7 +59,7 @@ WordWT::LowerComparer::LowerComparer(const T_word &tr)
 template<typename T>
 bool compareLower(T t1, T t2)
 {
-    return ::tolower_l(t1) == ::tolower_l(t2);
+    return ::tolower(t1) == ::tolower(t2);
 }
 
 template<> bool compareLower<QChar>(QChar ch1, QChar ch2)
