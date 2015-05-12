@@ -28,14 +28,9 @@ WordTeacher::~WordTeacher()
     slotClearWords();
 }
 
-void WordTeacher::addWord(WordWT *word)
+void WordTeacher::slotAddWord(WordWT *word)
 {
     if (word) m_vcblr.push_back(word);
-}
-
-bool WordTeacher::hasTranslation(const WordWT *word, const QString &translation) const
-{
-    return word->isTranslation(translation);
 }
 
 void WordTeacher::slotClearWords()
@@ -51,6 +46,11 @@ void WordTeacher::slotClearWords()
     std::for_each(m_vcblr_studied.begin(), m_vcblr_studied.end(), DeletePtrData());
     m_vcblr_studied.clear();
     T_vocabulary(m_vcblr_studied).swap(m_vcblr_studied);
+}
+
+void WordTeacher::slotHasTranslation(const WordWT *word, const QString &translation) const
+{
+    emit sigTranslationWasChecked( word->isTranslation(translation) );
 }
 
 void WordTeacher::slotGetWord()
@@ -93,10 +93,10 @@ void WordTeacher::slotDefineWordsQntty()
     emit sigWordsQnttyDefined( m_vcblr.size() * maxRepeatsQuantity );
 }
 
-void WordTeacher::slotGetTranslations(const WordWT *wwt, const QString &userTranslation)
+void WordTeacher::slotGetTranslations(const WordWT *wwt, const QString &highlightStr)
 {
     QString res;
-    WordWT::LowerComparer comp(userTranslation);
+    WordWT::LowerComparer comp(highlightStr);
     const WordWT::T_arrTransls &C_translations = wwt->m_translations;
     WordWT::T_arrTransls::const_iterator cit;
     for (cit = C_translations.begin(); cit != C_translations.end(); ++cit) {

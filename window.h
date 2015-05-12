@@ -23,12 +23,25 @@ class ResultsController;
 class Window : public QWidget
 {
     Q_OBJECT
-
 public:
     explicit Window(QWidget *parent = 0);
     ~Window();
 
+signals:
+    void sigFileNameIsSpecified(const QString &);
+    void sigFileIsLoaded(bool);
+    void sigNewWordAvailable(WordWT *);
+    void sigNeedGetWord();
+    void sigNeedDisplayWord(const QString &);
+    void sigNeedCheckWord(const WordWT *, const QString &);
+    void sigWordChecked(bool);
+    void sigNeedDisplayAnswer(const WordWT *, const QString &);
+    void sigStartExamination();
+    void sigEndExamination(bool);
+    void sigSetPBAnswerCaption(const QString &);
+
 public slots:
+    void slotSetTranslationAccuracy(bool);
     void slotShowWarning(const QString &title, const QString &msg);
 
 private slots:
@@ -38,20 +51,9 @@ private slots:
     void slotRestartExamination();
     void slotAbout();
 
-signals:
-    void sigFileNameIsSpecified(const QString &);
-    void sigFileIsLoaded(bool);
-    void sigNeedGetWord();
-    void sigNeedDisplayWord(const QString &);
-    void sigWordChecked(bool);
-    void sigNeedDisplayAnswer(const WordWT *, const QString &);
-    void sigStartExamination();
-    void sigEndExamination(bool);
-    void sigSetPBAnswerCaption(const QString &);
-
 private:
     bool loadWords();
-    void addTestWords();
+    void loadTestWords();
     void askNextWord();
 
     Ui::Window *ui;
@@ -59,6 +61,7 @@ private:
     WordWT *m_currentWord;
     ResultsController *m_resCtrl;
     bool m_needCheckAnswer;
+    bool m_rightTranslation;
 };
 
 #endif // WINDOW_H

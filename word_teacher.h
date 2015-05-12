@@ -13,17 +13,17 @@ public:
     explicit WordTeacher(QObject *parent = 0);
     ~WordTeacher();
 
-    void addWord(WordWT *word);
-    bool hasTranslation(const WordWT *word, const QString &translation) const;
-
 signals:
     void sigWordSended(WordWT *);
     void sigWordsQnttyDefined(int);
+    void sigTranslationWasChecked(bool) const;
     void sigDisplayAnswer(const QString &);
 
 public slots:
+    void slotAddWord(WordWT *);
     void slotClearWords();
     void slotGetWord();
+    void slotHasTranslation(const WordWT *word, const QString &translation) const;
     void slotRestartTeaching();
     void slotDefineWordsQntty();
     void slotGetTranslations(const WordWT *, const QString &);

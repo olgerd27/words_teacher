@@ -42,6 +42,9 @@
        <property name="text">
         <string>&amp;Load...</string>
        </property>
+       <property name="autoDefault">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -70,7 +73,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>12</height>
+       <height>10</height>
       </size>
      </property>
     </spacer>
@@ -237,6 +240,9 @@
           <property name="text">
            <string>&amp;Restart</string>
           </property>
+          <property name="autoDefault">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -289,7 +295,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>20</height>
+           <height>10</height>
           </size>
          </property>
         </spacer>
@@ -562,6 +568,9 @@
          <property name="text">
           <string>A&amp;bout</string>
          </property>
+         <property name="autoDefault">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -574,6 +583,9 @@
          </property>
          <property name="text">
           <string>&amp;Exit</string>
+         </property>
+         <property name="autoDefault">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
