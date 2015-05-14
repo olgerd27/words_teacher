@@ -17,15 +17,18 @@ SOURCES += main.cpp\
     wordwt.cpp \
     word_teacher.cpp \
     results_controller.cpp \
-    words_reader.cpp
+    words_reader.cpp \
+    settings_dialog.cpp
 
 HEADERS  += window.h \
     wordwt.h \
     word_teacher.h \
     results_controller.h \
     reimplemented_widgets.h \
-    words_reader.h
+    words_reader.h \
+    settings_dialog.h
 
-FORMS    += window.ui
+FORMS    += window.ui \
+    settings_dialog.ui
 
 OTHER_FILES +=

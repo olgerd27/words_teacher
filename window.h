@@ -13,7 +13,7 @@ class ResultsController;
 /*
  * TODO: there are need to implement the Settings widget, that calls by clicking to the Settings push button.
  * Settings widget can to have:
- * - repeate word quantity;
+ * - repetition word quantity;
  * - input files encoding: Linux - "UTF-8", Windows - "windows-1251", ...
  *   (this allow user to work with a text files, that saved in the another OS and encoding then current);
  * - symbol, separated word and translation words;
@@ -49,6 +49,7 @@ private slots:
     void slotGetCurrentWord(WordWT *);
     void slotAnswerWord();
     void slotRestartExamination();
+    void slotShowSettings();
     void slotAbout();
 
 private:

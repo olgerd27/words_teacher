@@ -1,7 +1,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDebug>
-#include  <stdexcept>
+#include <stdexcept>
 
 #include "window.h"
 #include "ui_window.h"
@@ -9,6 +9,7 @@
 #include "results_controller.h"
 #include "wordwt.h"
 #include "words_reader.h"
+#include "settings_dialog.h"
 
 Window::Window(QWidget *parent)
     : QWidget(parent)
@@ -79,6 +80,7 @@ Window::Window(QWidget *parent)
     connect(m_resCtrl, SIGNAL(sigUpdateConclusion(QString)), ui->m_lConclusion, SLOT(setText(QString)));
 
     /* Others */
+    connect(ui->m_pbSettings, SIGNAL(clicked()), this, SLOT(slotShowSettings()));
     connect(ui->m_pbAbout, SIGNAL(clicked()), this, SLOT(slotAbout()));
 
     emit sigFileIsLoaded(false);
@@ -99,8 +101,8 @@ void Window::slotSetTranslationAccuracy(bool b)
 void Window::slotLoadData()
 {
     try {
-        loadTestWords();
-//        if (!loadWords()) return;
+//        loadTestWords();
+        if (!loadWords()) return;
     }
     catch (std::runtime_error &ex) {
         emit sigFileIsLoaded(false);
@@ -195,9 +197,10 @@ void Window::askNextWord()
     emit sigNeedDisplayWord( m_currentWord->word(WordWT::GetWithRepeat) );
 }
 
-void Window::slotShowWarning(const QString &title, const QString &msg)
+void Window::slotShowSettings()
 {
-    QMessageBox::warning(this, title, msg);
+    SettingsDialog settings(this);
+    settings.exec();
 }
 
 void Window::slotAbout()
@@ -207,4 +210,9 @@ void Window::slotAbout()
                 "The app helps to study any language words and its translations.<br><br>"
                 "© M.O.I. Mykolaiv, Ukraine - 2015.";
     QMessageBox::about(this, tr("About"), tr(text.toUtf8()));
+}
+
+void Window::slotShowWarning(const QString &title, const QString &msg)
+{
+    QMessageBox::warning(this, title, msg);
 }
