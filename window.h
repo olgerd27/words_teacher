@@ -10,16 +10,6 @@ class WordTeacher;
 class WordWT;
 class ResultsController;
 
-/*
- * TODO: there are need to implement the Settings widget, that calls by clicking to the Settings push button.
- * Settings widget can to have:
- * - repetition word quantity;
- * - input files encoding: Linux - "UTF-8", Windows - "windows-1251", ...
- *   (this allow user to work with a text files, that saved in the another OS and encoding then current);
- * - symbol, separated word and translation words;
- * - symbol, separated translation words.
- */
-
 class Window : public QWidget
 {
     Q_OBJECT
@@ -28,6 +18,7 @@ public:
     ~Window();
 
 signals:
+    void sigSettingsWasSpecified(bool);
     void sigFileNameIsSpecified(const QString &);
     void sigFileIsLoaded(bool);
     void sigNewWordAvailable(WordWT *);
@@ -53,6 +44,7 @@ private slots:
     void slotAbout();
 
 private:
+    void checkSettingsExistence();
     bool loadWords();
     void loadTestWords();
     void askNextWord();

@@ -1,5 +1,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QSettings>
 #include <QDebug>
 #include <stdexcept>
 
@@ -21,6 +22,11 @@ Window::Window(QWidget *parent)
     , m_rightTranslation(false)
 {
     ui->setupUi(this);
+    setWindowTitle(qApp->applicationName());
+
+    /* Settings */
+    connect(this, SIGNAL(sigSettingsWasSpecified(bool)), ui->m_pbLoad, SLOT(setEnabled(bool)));
+    connect(this, SIGNAL(sigSettingsWasSpecified(bool)), ui->m_leFileName, SLOT(setEnabled(bool)));
 
     /* Load data */
     connect(ui->m_pbLoad, SIGNAL(clicked()), m_teacher, SLOT(slotClearWords()));
@@ -83,6 +89,7 @@ Window::Window(QWidget *parent)
     connect(ui->m_pbSettings, SIGNAL(clicked()), this, SLOT(slotShowSettings()));
     connect(ui->m_pbAbout, SIGNAL(clicked()), this, SLOT(slotAbout()));
 
+    checkSettingsExistence();
     emit sigFileIsLoaded(false);
 }
 
@@ -91,6 +98,18 @@ Window::~Window()
     delete ui;
     delete m_teacher;
     delete m_resCtrl;
+}
+
+/*
+ * Checking existence of the app settings.
+ * This function send false only if the app starts on the concrete OS in the first time
+ * (the settings file doesn't exists).
+ */
+void Window::checkSettingsExistence()
+{
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope,
+                       qApp->organizationName(), qApp->applicationName());
+    emit sigSettingsWasSpecified( !settings.allKeys().empty() );
 }
 
 void Window::slotSetTranslationAccuracy(bool b)
@@ -199,13 +218,13 @@ void Window::askNextWord()
 
 void Window::slotShowSettings()
 {
-    SettingsDialog settings(this);
-    settings.exec();
+    SettingsDialog setsDlg;
+    int re = setsDlg.exec();
+    checkSettingsExistence(); // need for recovery the app state after the app starting in the first time
 }
 
 void Window::slotAbout()
 {
-
     QString text = QString("The <b>") + windowTitle() + "</b> application.<br>"
                 "The app helps to study any language words and its translations.<br><br>"
                 "© M.O.I. Mykolaiv, Ukraine - 2015.";

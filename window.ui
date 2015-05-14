@@ -28,9 +28,6 @@
     <height>380</height>
    </size>
   </property>
-  <property name="windowTitle">
-   <string>Words Teacher</string>
-  </property>
   <property name="locale">
    <locale language="Russian" country="Ukraine"/>
   </property>
@@ -629,6 +626,7 @@
   <tabstop>m_leYourTranslation</tabstop>
   <tabstop>m_pbAnswerNext</tabstop>
   <tabstop>m_pbRestart</tabstop>
+  <tabstop>m_pbSettings</tabstop>
   <tabstop>m_pbAbout</tabstop>
   <tabstop>m_pbExit</tabstop>
  </tabstops>
