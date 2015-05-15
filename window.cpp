@@ -218,8 +218,8 @@ void Window::askNextWord()
 
 void Window::slotShowSettings()
 {
-    SettingsDialog setsDlg;
-    int re = setsDlg.exec();
+    SettingsDialog setsDlg(this);
+    setsDlg.exec();
     checkSettingsExistence(); // need for recovery the app state after the app starting in the first time
 }
 
