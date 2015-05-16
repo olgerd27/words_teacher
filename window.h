@@ -2,6 +2,7 @@
 #define WINDOW_H
 
 #include <QWidget>
+#include <QSettings>
 
 namespace Ui {
 class Window;
@@ -53,6 +54,7 @@ private:
     WordTeacher *m_teacher;
     WordWT *m_currentWord;
     ResultsController *m_resCtrl;
+    QSettings *m_settings;
     bool m_needCheckAnswer;
     bool m_rightTranslation;
 };

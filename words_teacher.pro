@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     word_teacher.cpp \
     results_controller.cpp \
     words_reader.cpp \
-    settings_dialog.cpp
+    settings_dialog.cpp \
+    settings_names.cpp
 
 HEADERS  += window.h \
     wordwt.h \
@@ -26,7 +27,8 @@ HEADERS  += window.h \
     results_controller.h \
     reimplemented_widgets.h \
     words_reader.h \
-    settings_dialog.h
+    settings_dialog.h \
+    settings_names.h
 
 FORMS    += window.ui \
     settings_dialog.ui

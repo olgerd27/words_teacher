@@ -2,22 +2,19 @@
 #include <QMessageBox>
 #include <QDebug>
 
-#include <stdexcept>
-
 #include "settings_dialog.h"
 #include "ui_settings_dialog.h"
+#include "settings_names.h"
 
-SettingsDialog::SettingsDialog(QWidget *parent)
+SettingsDialog::SettingsDialog(QSettings *settings, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::SettingsDialog)
-    , m_userSettings(new QSettings(QSettings::IniFormat, QSettings::UserScope,
-                                   qApp->organizationName(), qApp->applicationName()))
+    , m_settings(settings)
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     connect(this, SIGNAL(accepted()), this, SLOT(slotSaveSettings()));
 
-    defineSettingsNames();
     defineTextCodecs();
     readSettings();
 }
@@ -25,15 +22,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 SettingsDialog::~SettingsDialog()
 {
     delete ui;
-    delete m_userSettings;
-}
-
-void SettingsDialog::defineSettingsNames()
-{
-    m_settigsNames[SNI_repetitions] = "settings/repetitions_quantity";
-    m_settigsNames[SNI_codec] = "settings/files_codec";
-    m_settigsNames[SNI_sep_wt] = "settings/separator_wt";
-    m_settigsNames[SNI_sep_tt] = "settings/separator_tt";
 }
 
 void SettingsDialog::defineTextCodecs()
@@ -47,13 +35,13 @@ void SettingsDialog::defineTextCodecs()
 
 void SettingsDialog::readSettings()
 {
-    ui->m_sbRepetitions->setValue( m_userSettings->value( m_settigsNames[SNI_repetitions], 1 ).toInt() );
-    ui->m_leSepWT->setText( m_userSettings->value( m_settigsNames[SNI_sep_wt], "-" ).toString() );
-    ui->m_leSepTT->setText( m_userSettings->value( m_settigsNames[SNI_sep_tt], ",").toString() );
+    ui->m_sbRepetitions->setValue( m_settings->value( InstSettingsNames.SSname(SettingsNames::SS_repetitions), 1 ).toInt() );
+    ui->m_leSepWT->setText( m_settings->value( InstSettingsNames.SSname(SettingsNames::SS_sep_wt), "-" ).toString() );
+    ui->m_leSepTT->setText( m_settings->value( InstSettingsNames.SSname(SettingsNames::SS_sep_tt), ",").toString() );
 
     // set a text codec
-    QString currentCodec = m_userSettings->value( m_settigsNames[SNI_codec],
-                               QString(QTextCodec::codecForLocale()->name()) ).toString();
+    QString currentCodec = m_settings->value( InstSettingsNames.SSname(SettingsNames::SS_codec),
+                                              QString(QTextCodec::codecForLocale()->name()) ).toString();
     int index = ui->m_cbFilesCodec->findText(currentCodec);
     if (index == -1) { // if no one codec was found (it's possible only by incredible reasons)
         QString defaultCodec = QTextCodec::codecForLocale()->name();
@@ -68,16 +56,8 @@ void SettingsDialog::readSettings()
 
 void SettingsDialog::slotSaveSettings()
 {
-    m_userSettings->setValue( m_settigsNames[SNI_repetitions], ui->m_sbRepetitions->value() );
-    m_userSettings->setValue( m_settigsNames[SNI_codec], ui->m_cbFilesCodec->currentText() );
-    m_userSettings->setValue( m_settigsNames[SNI_sep_wt], ui->m_leSepWT->text() );
-    m_userSettings->setValue( m_settigsNames[SNI_sep_tt], ui->m_leSepTT->text() );
-}
-
-const char *SettingsDialog::settingsName(SettingsDialog::settingsNamesIndexes index)
-{
-    if (index < 0 || index >= SNI_SIZE)
-        throw std::out_of_range( (tr("[SettingsDialog] Cannot pass a settings name -> bad index ") +
-                 QString::number((int)index)).toStdString() );
-    return m_settigsNames[index];
+    m_settings->setValue( InstSettingsNames.SSname(SettingsNames::SS_repetitions), ui->m_sbRepetitions->value() );
+    m_settings->setValue( InstSettingsNames.SSname(SettingsNames::SS_codec), ui->m_cbFilesCodec->currentText() );
+    m_settings->setValue( InstSettingsNames.SSname(SettingsNames::SS_sep_wt), ui->m_leSepWT->text() );
+    m_settings->setValue( InstSettingsNames.SSname(SettingsNames::SS_sep_tt), ui->m_leSepTT->text() );
 }

@@ -1,6 +1,5 @@
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QSettings>
 #include <QDebug>
 #include <stdexcept>
 
@@ -18,6 +17,8 @@ Window::Window(QWidget *parent)
     , m_teacher(new WordTeacher())
     , m_currentWord(0)
     , m_resCtrl(new ResultsController())
+    , m_settings( new QSettings( QSettings::IniFormat, QSettings::UserScope,
+                                 qApp->organizationName(), qApp->applicationName() ) )
     , m_needCheckAnswer(true)
     , m_rightTranslation(false)
 {
@@ -98,18 +99,17 @@ Window::~Window()
     delete ui;
     delete m_teacher;
     delete m_resCtrl;
+    delete m_settings;
 }
 
 /*
  * Checking existence of the app settings.
  * This function send false only if the app starts on the concrete OS in the first time
- * (the settings file doesn't exists).
+ * (the settings doesn't exists).
  */
 void Window::checkSettingsExistence()
 {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                       qApp->organizationName(), qApp->applicationName());
-    emit sigSettingsWasSpecified( !settings.allKeys().empty() );
+    emit sigSettingsWasSpecified( !m_settings->allKeys().empty() );
 }
 
 void Window::slotSetTranslationAccuracy(bool b)
@@ -218,7 +218,7 @@ void Window::askNextWord()
 
 void Window::slotShowSettings()
 {
-    SettingsDialog setsDlg(this);
+    SettingsDialog setsDlg(m_settings, this);
     setsDlg.exec();
     checkSettingsExistence(); // need for recovery the app state after the app starting in the first time
 }

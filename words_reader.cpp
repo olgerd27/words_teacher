@@ -2,11 +2,12 @@
 #include <stdexcept>
 #include "words_reader.h"
 #include "wordwt.h"
+#include "settings_names.h"
 
-WordsReader::WordsReader(const QString &filename, char sepWT, char sepT, QObject *parent)
+WordsReader::WordsReader(const QString &filename, char sepWT, char sepTT, QObject *parent)
     : QFile(filename, parent)
     , m_sep_wt(sepWT)
-    , m_sep_t(sepT)
+    , m_sep_tt(sepTT)
     , m_lineCount(0)
 {
     if (!open(QIODevice::ReadOnly | QIODevice::Text))
@@ -40,14 +41,14 @@ WordWT * WordsReader::parseWordAndTranslations(const QString &line) const
 
     QStringList word_trans = line.split(m_sep_wt);
     if (word_trans.size() > 2)
-        throw std::runtime_error( (tr("Unexpected quantity of separators") + QString(" \"%1\" ").arg(m_sep_wt) +
+        throw std::runtime_error( (tr("To many the word-translations separators") + QString(" \"%1\" ").arg(m_sep_wt) +
                                    tr("in the file line") +
                                    QString(" #%2: %3").arg(m_lineCount).arg(line)).toStdString() );
 
     WordWT *word = new WordWT(word_trans.at(0));
-    QStringList trans = word_trans.at(1).split(m_sep_t);
+    QStringList trans = word_trans.at(1).split(m_sep_tt);
     if (trans.size() == 0)
-        throw std::runtime_error( (tr("No one translation was found in the file to the: ") +
+        throw std::runtime_error( (tr("No one translation was found in the file to the word: ") +
                                    word_trans.at(0)).toStdString() );
 
     foreach (const QString &trWord, trans) {

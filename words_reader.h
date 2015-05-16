@@ -8,7 +8,7 @@ class WordsReader : public QFile
 {
     Q_OBJECT
 public:
-    explicit WordsReader(const QString &filename, char sepWT, char sepT, QObject *parent = 0);
+    explicit WordsReader(const QString &filename, char sepWT, char sepTT, QObject *parent = 0);
     ~WordsReader();
     WordWT * getWord();
 
@@ -18,7 +18,7 @@ signals:
 private:
     WordWT * parseWordAndTranslations(const QString &line) const;
 
-    const char m_sep_wt, m_sep_t;
+    const char m_sep_wt, m_sep_tt;
     int m_lineCount;
 };
 
