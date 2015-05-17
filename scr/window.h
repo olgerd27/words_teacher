@@ -46,10 +46,12 @@ private slots:
     void slotAbout();
 
 private:
+    void readSettings();
     void checkSettingsExistence();
     bool loadWords();
     void loadTestWords();
     void askNextWord();
+    void closeEvent(QCloseEvent *);
 
     Ui::Window *ui;
     WordTeacher *m_teacher;

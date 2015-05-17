@@ -10,6 +10,7 @@
 #include "wordwt.h"
 #include "words_reader.h"
 #include "settings_dialog.h"
+#include "settings_names.h"
 
 Window::Window(QWidget *parent)
     : QWidget(parent)
@@ -90,6 +91,7 @@ Window::Window(QWidget *parent)
     connect(ui->m_pbSettings, SIGNAL(clicked()), this, SLOT(slotShowSettings()));
     connect(ui->m_pbAbout, SIGNAL(clicked()), this, SLOT(slotAbout()));
 
+    readSettings();
     checkSettingsExistence();
     emit sigFileIsLoaded(false);
 }
@@ -100,6 +102,17 @@ Window::~Window()
     delete m_teacher;
     delete m_resCtrl;
     delete m_settings;
+}
+
+void Window::readSettings()
+{
+    const char *key = InstSettingsNames.MWSname(SettingsNames::MWS_winSize);
+    if (m_settings->contains(key))
+        resize( m_settings->value(key).toSize() );
+
+    key = InstSettingsNames.MWSname(SettingsNames::MWS_winPos);
+    if (m_settings->contains(key))
+        move( m_settings->value(key).toPoint() );
 }
 
 /*
@@ -125,12 +138,12 @@ void Window::slotLoadData()
     }
     catch (const std::runtime_error &ex) {
         emit sigFileIsLoaded(false);
-//        QMessageBox::critical(this, tr("Error load words"), ex.what());
+//        QMessageBox::critical(this, tr("Error load words"), ex.what()); // comment for exclusion double error message showing
         return;
     }
     catch (...) {
         emit sigFileIsLoaded(false);
-//        QMessageBox::critical(this, tr("Error load words"), tr("Undefined error occured"));
+//        QMessageBox::critical(this, tr("Error load words"), tr("Undefined error occured")); // comment for exclusion double error message showing
         return;
     }
 
@@ -222,6 +235,12 @@ void Window::slotShowSettings()
     SettingsDialog setsDlg(m_settings, this);
     setsDlg.exec();
     checkSettingsExistence(); // need for recovery the app state after the app starting in the first time
+}
+
+void Window::closeEvent(QCloseEvent *)
+{
+    m_settings->setValue( InstSettingsNames.MWSname(SettingsNames::MWS_winSize), size() );
+    m_settings->setValue( InstSettingsNames.MWSname(SettingsNames::MWS_winPos), pos() );
 }
 
 void Window::slotAbout()

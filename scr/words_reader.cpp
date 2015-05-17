@@ -33,7 +33,6 @@ WordWT * WordsReader::getWord()
 
 WordWT * WordsReader::parseLine(const QString &strLine)
 {
-    qDebug() << "Line: \"" << strLine << "\"";
     if (strLine.isEmpty()) {
         emit sigWarningOccured( tr("File loading - parsing file line"),
                                 tr("Empty readed line #") + QString::number(m_lineCount) );
@@ -70,7 +69,6 @@ void WordsReader::parseTranslations(const QString &strWord, const QString &strTr
 {
     /* extracting translations */
     QString sep_tt = m_settings->value( InstSettingsNames.SSname(SettingsNames::SS_sep_tt), ',' ).toString();
-    qDebug() << "sep TT:" << sep_tt;
     // TODO: think how to implement criteria of absence the separator sep_tt in the file line (-s)
 //    if (!strTranslations.contains(sep_tt)) {
 //        criticalErrorOccured( tr("Cannot extract translation(-s) for the word") + " \"" + strWord + "\" " +
@@ -79,11 +77,6 @@ void WordsReader::parseTranslations(const QString &strWord, const QString &strTr
 //                              " " + tr("and load the file again.") );
 //    }
     QStringList trans = strTranslations.split(sep_tt);
-    qDebug() << "Translations str[" << strTranslations.size() << "]:" << strTranslations << ", parsed:";
-    foreach (QString str, trans) {
-        qDebug() << str;
-    }
-    qDebug() << "trans.size() =" << trans.size() << ", trans.at(0).size() =" << trans.at(0).size();
     if (trans.size() == 1 && trans.at(0).trimmed().size() == 0) {
         criticalErrorOccured( tr("No one translation(-s) was found for the word") + ":\n\"" + strWord + "\"\n" +
                               tr("in the file line") + QString(" #%1:\n\n").arg(m_lineCount) +
@@ -92,7 +85,6 @@ void WordsReader::parseTranslations(const QString &strWord, const QString &strTr
     foreach (const QString &trWord, trans) {
         word->addTranslation(trWord.trimmed()); // save translations
     }
-    qDebug() << "-------";
 }
 
 void WordsReader::criticalErrorOccured(const QString &msg)
