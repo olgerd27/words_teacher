@@ -24,8 +24,8 @@ public:
         return singleInstance;
     }
 
-    const char * SSname(SettingsNames::settingsSection index);
-    const char * MWSname(SettingsNames::mainwindowSection index);
+    const char * SSname(SettingsNames::settingsSection index); // get settings - settings name
+    const char * MWSname(SettingsNames::mainwindowSection index); // get settings - mainwindow name
 
 private:
     SettingsNames();

@@ -150,7 +150,7 @@ bool Window::loadWords()
     if (filename.isEmpty()) return false;
     emit sigFileNameIsSpecified(filename);
 
-    WordsReader reader(filename, '-', ',');
+    WordsReader reader(filename, m_settings, this);
     connect(&reader, SIGNAL(sigWarningOccured(QString, QString)), this, SLOT(slotShowWarning(QString, QString)));
     WordWT *word = 0;
     while ( (word = reader.getWord()) != 0 )

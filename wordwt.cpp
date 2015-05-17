@@ -4,6 +4,11 @@
 /*
  * WordWT
  */
+WordWT::WordWT()
+    : m_checksCount(0)
+{
+}
+
 WordWT::WordWT(const T_word &word)
     : m_word(word)
     , m_checksCount(0)

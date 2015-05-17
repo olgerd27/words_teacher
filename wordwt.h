@@ -21,6 +21,7 @@ public:
         GetWithoutRepeat /* word getting without increment repeating */
     };
 
+    WordWT();
     WordWT(const T_word &word);
 
     void setWord(const T_word &word);
