@@ -22,6 +22,10 @@
     <height>400</height>
    </size>
   </property>
+  <property name="windowIcon">
+   <iconset resource="wt_resources.qrc">
+    <normaloff>:/rsc/window_icon.png</normaloff>:/rsc/window_icon.png</iconset>
+  </property>
   <property name="locale">
    <locale language="Russian" country="Ukraine"/>
   </property>
@@ -633,7 +637,9 @@
   <tabstop>m_pbAbout</tabstop>
   <tabstop>m_pbExit</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="wt_resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>m_pbExit</sender>

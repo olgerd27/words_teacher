@@ -34,3 +34,6 @@ FORMS    += window.ui \
     settings_dialog.ui
 
 OTHER_FILES +=
+
+RESOURCES += \
+    wt_resources.qrc
