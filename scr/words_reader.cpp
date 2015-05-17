@@ -35,7 +35,7 @@ WordWT * WordsReader::parseLine(const QString &strLine)
 {
     qDebug() << "Line: \"" << strLine << "\"";
     if (strLine.isEmpty()) {
-        emit sigWarningOccured( tr("Parsing file line"),
+        emit sigWarningOccured( tr("File loading - parsing file line"),
                                 tr("Empty readed line #") + QString::number(m_lineCount) );
         return 0;
     }
@@ -54,15 +54,13 @@ void WordsReader::parseWord(const QString &line, QString &strTranslations, WordW
     QStringList word_trans = line.split(sep_wt);
     if (word_trans.size() > 2) {
         criticalErrorOccured( tr("To many word-translations separators") + QString(" \"%1\" ").arg(sep_wt) +
-                                   tr("in the file line") +
-                                   QString(" #%1:\n\"%2\"").arg(m_lineCount).arg(line) );
+                              tr("in the file line") + QString(" #%1:\n\"%2\"").arg(m_lineCount).arg(line) );
     }
     if (word_trans.size() == 1) {
-        criticalErrorOccured( tr("File loading error.") + "\n" +
-                               tr("Cannot extract word and translation(-s) from the file line") +
-                               QString(" #%1:\n\"%2\"\n").arg(m_lineCount).arg(line) +
-                               tr("Invalid separator: ") + sep_wt + "\n\n" +
-                               tr("Please set another Word-Translations separator in the Settings and try to load the file again.") );
+        criticalErrorOccured( tr("Cannot extract word and translation(-s) from the file line") +
+                              QString(" #%1:\n\"%2\"\n").arg(m_lineCount).arg(line) +
+                              tr("Invalid separator: ") + sep_wt + "\n\n" +
+                              tr("Please set another Word-Translations separator in the Settings and try to load the file again.") );
     }
     word->setWord(word_trans.at(0));
     strTranslations = word_trans.at(1);
@@ -75,8 +73,7 @@ void WordsReader::parseTranslations(const QString &strWord, const QString &strTr
     qDebug() << "sep TT:" << sep_tt;
     // TODO: think how to implement criteria of absence the separator sep_tt in the file line (-s)
 //    if (!strTranslations.contains(sep_tt)) {
-//        criticalErrorOccured( tr("File loading error.") + "\n" +
-//                              tr("Cannot extract translation(-s) for the word") + " \"" + strWord + "\" " +
+//        criticalErrorOccured( tr("Cannot extract translation(-s) for the word") + " \"" + strWord + "\" " +
 //                              tr("from the file line") + QString(" #%1:\n\"%2\"\n\n").arg(m_lineCount).arg(strTranslations) +
 //                              tr("Please correct the Translations separator in the file and (or) in the application Settings") +
 //                              " " + tr("and load the file again.") );
@@ -88,8 +85,7 @@ void WordsReader::parseTranslations(const QString &strWord, const QString &strTr
     }
     qDebug() << "trans.size() =" << trans.size() << ", trans.at(0).size() =" << trans.at(0).size();
     if (trans.size() == 1 && trans.at(0).trimmed().size() == 0) {
-        criticalErrorOccured( tr("File loading error.") + "\n" +
-                              tr("No one translation(-s) was found to the word") + ":\n\"" + strWord + "\"\n" +
+        criticalErrorOccured( tr("No one translation(-s) was found for the word") + ":\n\"" + strWord + "\"\n" +
                               tr("in the file line") + QString(" #%1:\n\n").arg(m_lineCount) +
                               tr("Add translation(-s) in the file to current word and load the file again.") );
     }
@@ -99,9 +95,8 @@ void WordsReader::parseTranslations(const QString &strWord, const QString &strTr
     qDebug() << "-------";
 }
 
-void WordsReader::criticalErrorOccured(const QString &mess)
+void WordsReader::criticalErrorOccured(const QString &msg)
 {
     close();
-    // FIXME: replace throw on the sending critical error through SIGNAL to the mainwindow
-    throw std::runtime_error(mess.toStdString());
+    emit sigCriticalErrorOccured( tr("File loading error"), msg );
 }

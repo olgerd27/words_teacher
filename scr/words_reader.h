@@ -17,12 +17,13 @@ public:
 
 signals:
     void sigWarningOccured(const QString &title, const QString &msg) const;
+    void sigCriticalErrorOccured(const QString &title, const QString &msg) const;
 
 private:
     WordWT * parseLine(const QString &strLine);
     void parseWord(const QString &line, QString &strTranslations, WordWT *word);
     void parseTranslations(const QString &strWord, const QString &strTranslations, WordWT *word);
-    void criticalErrorOccured(const QString &mess);
+    void criticalErrorOccured(const QString &msg);
 
     QTextStream *m_textStream;
     QSettings *m_settings;

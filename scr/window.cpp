@@ -123,14 +123,14 @@ void Window::slotLoadData()
 //        loadTestWords();
         if (!loadWords()) return;
     }
-    catch (std::runtime_error &ex) {
+    catch (const std::runtime_error &ex) {
         emit sigFileIsLoaded(false);
-        QMessageBox::critical(this, tr("Error load words"), ex.what());
+//        QMessageBox::critical(this, tr("Error load words"), ex.what());
         return;
     }
     catch (...) {
         emit sigFileIsLoaded(false);
-        QMessageBox::critical(this, tr("Error load words"), tr("Undefined error occured"));
+//        QMessageBox::critical(this, tr("Error load words"), tr("Undefined error occured"));
         return;
     }
 
@@ -152,6 +152,7 @@ bool Window::loadWords()
 
     WordsReader reader(filename, m_settings, this);
     connect(&reader, SIGNAL(sigWarningOccured(QString, QString)), this, SLOT(slotShowWarning(QString, QString)));
+    connect(&reader, SIGNAL(sigCriticalErrorOccured(QString,QString)), this, SLOT(slotShowCriticalError(QString,QString)));
     WordWT *word = 0;
     while ( (word = reader.getWord()) != 0 )
         emit sigNewWordAvailable(word);
@@ -234,4 +235,10 @@ void Window::slotAbout()
 void Window::slotShowWarning(const QString &title, const QString &msg)
 {
     QMessageBox::warning(this, title, msg);
+}
+
+void Window::slotShowCriticalError(const QString &title, const QString &msg)
+{
+    QMessageBox::critical(this, title, msg);
+    throw std::runtime_error( msg.toStdString() );
 }

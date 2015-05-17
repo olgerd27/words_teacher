@@ -35,6 +35,7 @@ signals:
 public slots:
     void slotSetTranslationAccuracy(bool);
     void slotShowWarning(const QString &title, const QString &msg);
+    void slotShowCriticalError(const QString &title, const QString &msg);
 
 private slots:
     void slotLoadData();
