@@ -49,7 +49,7 @@ WordWT * WordsReader::parseLine(const QString &strLine)
 void WordsReader::parseWord(const QString &line, QString &strTranslations, WordWT *word)
 {
     /* extracting word */
-    QString sep_wt = m_settings->value( InstSettingsNames.SSname(SettingsNames::SS_sep_wt), '-' ).toString();
+    QString sep_wt = m_settings->value( InstSettingsNames.SSname(SettingsNames::SS_sep_wt), "-" ).toString();
     QStringList word_trans = line.split(sep_wt);
     if (word_trans.size() > 2) {
         criticalErrorOccured( tr("To many word-translations separators") + QString(" \"%1\" ").arg(sep_wt) +
@@ -58,7 +58,7 @@ void WordsReader::parseWord(const QString &line, QString &strTranslations, WordW
     if (word_trans.size() == 1) {
         criticalErrorOccured( tr("Cannot extract word and translation(-s) from the file line") +
                               QString(" #%1:\n\"%2\"\n").arg(m_lineCount).arg(line) +
-                              tr("Invalid separator: ") + sep_wt + "\n\n" +
+                              tr("Invalid separator") + ": \"" + sep_wt + "\"\n\n" +
                               tr("Please set another Word-Translations separator in the Settings and try to load the file again.") );
     }
     word->setWord(word_trans.at(0));
@@ -68,7 +68,7 @@ void WordsReader::parseWord(const QString &line, QString &strTranslations, WordW
 void WordsReader::parseTranslations(const QString &strWord, const QString &strTranslations, WordWT *word)
 {
     /* extracting translations */
-    QString sep_tt = m_settings->value( InstSettingsNames.SSname(SettingsNames::SS_sep_tt), ',' ).toString();
+    QString sep_tt = m_settings->value( InstSettingsNames.SSname(SettingsNames::SS_sep_tt), "," ).toString();
     // TODO: think how to implement criteria of absence the separator sep_tt in the file line (-s)
 //    if (!strTranslations.contains(sep_tt)) {
 //        criticalErrorOccured( tr("Cannot extract translation(-s) for the word") + " \"" + strWord + "\" " +

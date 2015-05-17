@@ -19,7 +19,6 @@ public:
     ~Window();
 
 signals:
-    void sigSettingsWasSpecified(bool);
     void sigFileNameIsSpecified(const QString &);
     void sigFileIsLoaded(bool);
     void sigNewWordAvailable(WordWT *);
@@ -47,7 +46,6 @@ private slots:
 
 private:
     void readSettings();
-    void checkSettingsExistence();
     bool loadWords();
     void loadTestWords();
     void askNextWord();

@@ -26,10 +26,6 @@ Window::Window(QWidget *parent)
     ui->setupUi(this);
     setWindowTitle(qApp->applicationName());
 
-    /* Settings */
-    connect(this, SIGNAL(sigSettingsWasSpecified(bool)), ui->m_pbLoad, SLOT(setEnabled(bool)));
-    connect(this, SIGNAL(sigSettingsWasSpecified(bool)), ui->m_leFileName, SLOT(setEnabled(bool)));
-
     /* Load data */
     connect(ui->m_pbLoad, SIGNAL(clicked()), m_teacher, SLOT(slotClearWords()));
     connect(ui->m_pbLoad, SIGNAL(clicked()), this, SLOT(slotLoadData()));
@@ -92,7 +88,6 @@ Window::Window(QWidget *parent)
     connect(ui->m_pbAbout, SIGNAL(clicked()), this, SLOT(slotAbout()));
 
     readSettings();
-    checkSettingsExistence();
     emit sigFileIsLoaded(false);
 }
 
@@ -113,16 +108,6 @@ void Window::readSettings()
     key = InstSettingsNames.MWSname(SettingsNames::MWS_winPos);
     if (m_settings->contains(key))
         move( m_settings->value(key).toPoint() );
-}
-
-/*
- * Checking existence of the app settings.
- * This function send false only if the app starts on the concrete OS in the first time
- * (the settings doesn't exists).
- */
-void Window::checkSettingsExistence()
-{
-    emit sigSettingsWasSpecified( !m_settings->allKeys().empty() );
 }
 
 void Window::slotSetTranslationAccuracy(bool b)
@@ -234,7 +219,6 @@ void Window::slotShowSettings()
 {
     SettingsDialog setsDlg(m_settings, this);
     setsDlg.exec();
-    checkSettingsExistence(); // need for recovery the app state after the app starting in the first time
 }
 
 void Window::closeEvent(QCloseEvent *)
