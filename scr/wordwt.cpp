@@ -36,7 +36,7 @@ bool WordWT::isTranslation(const T_word &tr) const
     return std::find_if(m_translations.begin(), m_translations.end(), LowerComparer(tr)) != m_translations.end();
 }
 
-int WordWT::repeatsCount() const
+int WordWT::repetitionsCount() const
 {
     return m_checksCount;
 }

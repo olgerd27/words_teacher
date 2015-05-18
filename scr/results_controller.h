@@ -2,6 +2,7 @@
 #define RESULTS_CONTROLLER_H
 
 #include <QObject>
+class QSettings;
 
 class ResultsController : public QObject
 {

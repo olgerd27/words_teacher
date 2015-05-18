@@ -53,6 +53,9 @@
        <height>0</height>
       </size>
      </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The repetition quantity of every word. After change this value click &lt;span style=&quot; font-weight:600;&quot;&gt;Restart&lt;/span&gt; on the main window for applying this change.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="minimum">
       <number>1</number>
      </property>
@@ -97,6 +100,9 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Encoding of a loading files.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
        </widget>
       </item>
       <item row="1" column="0">
@@ -134,6 +140,9 @@
           <pointsize>10</pointsize>
          </font>
         </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The symbol that used for separating every &lt;span style=&quot; font-weight:600;&quot;&gt;word&lt;/span&gt; and its &lt;span style=&quot; font-weight:600;&quot;&gt;translations&lt;/span&gt; in the loading file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
        </widget>
       </item>
       <item row="2" column="0">
@@ -170,6 +179,9 @@
          <font>
           <pointsize>10</pointsize>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The symbol that used for separating &lt;span style=&quot; font-weight:600;&quot;&gt;translations&lt;/span&gt; of every word in the loading file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>

@@ -52,10 +52,10 @@ private:
     void closeEvent(QCloseEvent *);
 
     Ui::Window *ui;
-    WordTeacher *m_teacher;
-    WordWT *m_currentWord;
-    ResultsController *m_resCtrl;
     QSettings *m_settings;
+    WordTeacher *m_teacher;
+    ResultsController *m_resCtrl;
+    WordWT *m_currentWord;
     bool m_needCheckAnswer;
     bool m_rightTranslation;
 };

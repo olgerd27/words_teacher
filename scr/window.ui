@@ -325,7 +325,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Words remaining</string>
+             <string>Words remaining:</string>
             </property>
            </widget>
           </item>
@@ -473,7 +473,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Translated words</string>
+             <string>Successfully translated words:</string>
             </property>
            </widget>
           </item>
@@ -531,7 +531,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Your mark</string>
+             <string>Your mark:</string>
             </property>
            </widget>
           </item>

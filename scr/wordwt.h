@@ -30,7 +30,7 @@ public:
     void addTranslation(const T_word &tr);
     bool isTranslation(const T_word &tr) const;
 
-    int repeatsCount() const;
+    int repetitionsCount() const;
     void flush();
 
     friend class WordTeacher;

@@ -5,12 +5,13 @@
 #include <vector>
 
 class WordWT;
+class QSettings;
 
 class WordTeacher : public QObject
 {
     Q_OBJECT
 public:
-    explicit WordTeacher(QObject *parent = 0);
+    explicit WordTeacher(const QSettings *settings, QObject *parent = 0);
     ~WordTeacher();
 
 signals:
@@ -22,10 +23,9 @@ signals:
 public slots:
     void slotAddWord(WordWT *);
     void slotClearWords();
-    void slotGetWord();
-    void slotHasTranslation(const WordWT *word, const QString &translation) const;
     void slotRestartTeaching();
-    void slotDefineWordsQntty();
+    void slotHasTranslation(const WordWT *word, const QString &translation) const;
+    void slotGetWord();
     void slotGetTranslations(const WordWT *, const QString &);
 
 private:
@@ -33,8 +33,10 @@ private:
 
     typedef std::vector<WordWT*> T_vocabulary;
 
-    enum { maxRepeatsQuantity = 1 };
+    enum { defaultRepetitionsQuantity = 1 };
 
+    const QSettings *m_settings;
+    int m_repetitions;
     T_vocabulary m_vcblr;
     T_vocabulary m_vcblr_studied;
 };

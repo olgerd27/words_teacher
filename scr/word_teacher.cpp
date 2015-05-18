@@ -1,9 +1,12 @@
-﻿#include <algorithm>
+﻿#include <QSettings>
+
+#include <algorithm>
 #include <iterator>
 #include <ctime>
 
 #include "word_teacher.h"
 #include "wordwt.h"
+#include "settings_names.h"
 
 struct DeletePtrData
 {
@@ -17,8 +20,10 @@ struct DeletePtrData
 /*
  * WordTeacher
  */
-WordTeacher::WordTeacher(QObject *parent)
+WordTeacher::WordTeacher(const QSettings *settings, QObject *parent)
     : QObject(parent)
+    , m_settings(settings)
+    , m_repetitions(0)
 {
     srand(time(0));
 }
@@ -48,6 +53,20 @@ void WordTeacher::slotClearWords()
     T_vocabulary(m_vcblr_studied).swap(m_vcblr_studied);
 }
 
+void flushWord(WordWT *w) { w->flush(); }
+
+void WordTeacher::slotRestartTeaching()
+{
+    /* Restart learning the words of the current vocabulary */
+    if (!m_vcblr_studied.empty()) {
+        std::copy(m_vcblr_studied.begin(), m_vcblr_studied.end(), std::back_inserter(m_vcblr));
+        m_vcblr_studied.clear();
+    }
+    std::for_each(m_vcblr.begin(), m_vcblr.end(), flushWord);
+    m_repetitions = m_settings->value( InstSettingsNames.SSname(SettingsNames::SS_repetitions), defaultRepetitionsQuantity ).toInt();
+    emit sigWordsQnttyDefined( m_vcblr.size() * m_repetitions );
+}
+
 void WordTeacher::slotHasTranslation(const WordWT *word, const QString &translation) const
 {
     emit sigTranslationWasChecked( word->isTranslation(translation) );
@@ -68,29 +87,12 @@ void WordTeacher::slotGetWord()
 
 bool WordTeacher::wordIsStudied(WordWT *word)
 {
-    bool b = word->repeatsCount() >= maxRepeatsQuantity;
+    bool b = word->repetitionsCount() >= m_repetitions;
     if (b) {
         m_vcblr_studied.push_back(word); // copying the word, that can to use when user will want to restart words teaching
         m_vcblr.erase( std::find(m_vcblr.begin(), m_vcblr.end(), word) ); // erase studied word from vocabulary
     }
     return b;
-}
-
-void flushWord(WordWT *w) { w->flush(); }
-
-void WordTeacher::slotRestartTeaching()
-{
-    /* Restart studying the words of the current vocabulary */
-    if (!m_vcblr_studied.empty()) {
-        std::copy(m_vcblr_studied.begin(), m_vcblr_studied.end(), std::back_inserter(m_vcblr));
-        m_vcblr_studied.clear();
-    }
-    std::for_each(m_vcblr.begin(), m_vcblr.end(), flushWord);
-}
-
-void WordTeacher::slotDefineWordsQntty()
-{
-    emit sigWordsQnttyDefined( m_vcblr.size() * maxRepeatsQuantity );
 }
 
 void WordTeacher::slotGetTranslations(const WordWT *wwt, const QString &highlightStr)

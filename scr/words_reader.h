@@ -11,7 +11,7 @@ class WordsReader : public QFile
 {
     Q_OBJECT
 public:
-    explicit WordsReader(const QString &filename, QSettings *settings, QObject *parent = 0);
+    explicit WordsReader(const QString &filename, const QSettings *settings, QObject *parent = 0);
     ~WordsReader();
     WordWT * getWord();
 
@@ -26,7 +26,7 @@ private:
     void criticalErrorOccured(const QString &msg);
 
     QTextStream *m_textStream;
-    QSettings *m_settings;
+    const QSettings *m_settings;
     int m_lineCount;
 };
 

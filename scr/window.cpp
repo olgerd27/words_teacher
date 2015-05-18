@@ -15,11 +15,11 @@
 Window::Window(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Window)
-    , m_teacher(new WordTeacher())
-    , m_currentWord(0)
-    , m_resCtrl(new ResultsController())
     , m_settings( new QSettings( QSettings::IniFormat, QSettings::UserScope,
                                  qApp->organizationName(), qApp->applicationName() ) )
+    , m_teacher(new WordTeacher(m_settings))
+    , m_resCtrl(new ResultsController(m_settings))
+    , m_currentWord(0)
     , m_needCheckAnswer(true)
     , m_rightTranslation(false)
 {
@@ -40,7 +40,6 @@ Window::Window(QWidget *parent)
 
     /* Start Examination */
     connect(this, SIGNAL(sigStartExamination()), m_teacher, SLOT(slotRestartTeaching()));
-    connect(this, SIGNAL(sigStartExamination()), m_teacher, SLOT(slotDefineWordsQntty()));
     connect(this, SIGNAL(sigStartExamination()), m_resCtrl, SLOT(slotUpdateResults()));
 
     /* Examination */

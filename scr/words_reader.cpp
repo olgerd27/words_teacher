@@ -7,7 +7,7 @@
 #include "wordwt.h"
 #include "settings_names.h"
 
-WordsReader::WordsReader(const QString &filename, QSettings *settings, QObject *parent)
+WordsReader::WordsReader(const QString &filename, const QSettings *settings, QObject *parent)
     : QFile(filename, parent)
     , m_textStream(new QTextStream(this))
     , m_settings(settings)
