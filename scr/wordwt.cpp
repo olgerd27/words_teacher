@@ -9,13 +9,13 @@ WordWT::WordWT()
 {
 }
 
-WordWT::WordWT(const T_word &word)
+WordWT::WordWT(const WordWT::T_word &word)
     : m_word(word)
     , m_checksCount(0)
 {
 }
 
-void WordWT::setWord(const T_word &word)
+void WordWT::setWord(const WordWT::T_word &word)
 {
     m_word = word;
 }
@@ -26,12 +26,12 @@ WordWT::T_word WordWT::word(WordWT::getWordMode mode)
     return m_word;
 }
 
-void WordWT::addTranslation(const T_word &tr)
+void WordWT::addTranslation(const WordWT::T_word &tr)
 {
     m_translations.push_back(tr);
 }
 
-bool WordWT::isTranslation(const T_word &tr) const
+bool WordWT::isTranslation(const WordWT::T_word &tr) const
 {
     return std::find_if(m_translations.begin(), m_translations.end(), LowerComparer(tr)) != m_translations.end();
 }
@@ -56,7 +56,7 @@ QDebug operator<<(QDebug qdbg, WordWT &w)
 /*
  * WordWT::LowerCompare
  */
-WordWT::LowerComparer::LowerComparer(const T_word &tr)
+WordWT::LowerComparer::LowerComparer(const WordWT::T_word &tr)
     : m_tr(tr)
 {
 }
@@ -72,7 +72,7 @@ template<> bool compareLower<QChar>(QChar ch1, QChar ch2)
     return ch1.toLower() == ch2.toLower();
 }
 
-bool WordWT::LowerComparer::operator()(const T_word &tr) const
+bool WordWT::LowerComparer::operator()(const WordWT::T_word &tr) const
 {
-    return (tr.size() == m_tr.size()) && ( std::equal(tr.begin(), tr.end(), m_tr.begin(), compareLower<T_word::value_type>) );
+    return (tr.size() == m_tr.size()) && ( std::equal(tr.begin(), tr.end(), m_tr.begin(), compareLower<WordWT::T_word::value_type>) );
 }

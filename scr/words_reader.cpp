@@ -61,7 +61,7 @@ void WordsReader::parseWord(const QString &line, QString &strTranslations, WordW
                               tr("Invalid separator") + ": \"" + sep_wt + "\"\n\n" +
                               tr("Please set another Word-Translations separator in the Settings and try to load the file again.") );
     }
-    word->setWord(word_trans.at(0));
+    word->setWord(word_trans.at(0).trimmed());
     strTranslations = word_trans.at(1);
 }
 
