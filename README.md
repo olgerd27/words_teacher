@@ -1,2 +1,2 @@
 # words_teacher
-The app helps to study any language words and its translations.
+The app helps to study any foreign words and its translations.
